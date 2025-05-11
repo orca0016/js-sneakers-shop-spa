@@ -1,3 +1,5 @@
+import { login } from "../../apis/auth";
+import { tokenName } from "../libs/constants";
 import {
   backIcon,
   emailIcon,
@@ -64,15 +66,37 @@ const isPasswordValid = (value) => {
 export const customForm = () => {
   const form = document.createElement("form");
   form.className = "w-full mt-[48px] flex flex-col gap-[21px]";
-
-  const usernameWrapper = createInputField("text", "username", "Username", emailIcon);
-  const passwordWrapper = createInputField("password", "password", "Password", lockIcon);
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const data = { username, password };
+    try {
+      const resBody = await login(data);
+      localStorage.setItem(tokenName, resBody.token);
+      location.href = "/";
+    } catch (error) {      
+      console.log(error);
+    }
+  });
+  const usernameWrapper = createInputField(
+    "text",
+    "username",
+    "Username",
+    emailIcon
+  );
+  const passwordWrapper = createInputField(
+    "password",
+    "password",
+    "Password",
+    lockIcon
+  );
 
   const usernameInput = usernameWrapper.querySelector("input");
   const passwordInput = passwordWrapper.querySelector("input");
 
   const submitBtn = document.createElement("button");
-  submitBtn.type = "button";
+  submitBtn.type = "submit";
   submitBtn.innerText = "Login";
   submitBtn.className =
     "w-full bg-dark-gray rounded-3xl h-[47px] text-white text-[14px] mt-[288px] cursor-pointer disabled:bg-disable-btn";
@@ -82,8 +106,14 @@ export const customForm = () => {
     const isUsernameValid = usernameInput.value.length >= 5;
     const isPassValid = isPasswordValid(passwordInput.value);
 
-    usernameInput.classList.toggle("outline-red-400", !isUsernameValid && usernameInput.value !== "");
-    passwordInput.classList.toggle("outline-red-400", !isPassValid && passwordInput.value !== "");
+    usernameInput.classList.toggle(
+      "outline-red-400",
+      !isUsernameValid && usernameInput.value !== ""
+    );
+    passwordInput.classList.toggle(
+      "outline-red-400",
+      !isPassValid && passwordInput.value !== ""
+    );
 
     if (isUsernameValid && isPassValid) {
       submitBtn.removeAttribute("disabled");
@@ -101,12 +131,7 @@ export const customForm = () => {
   signupLink.className = "text-center text-[14px] font-[500]";
   signupLink.innerText = "Signup";
 
-  form.append(
-    usernameWrapper,
-    passwordWrapper,
-    signupLink,
-    submitBtn
-  );
+  form.append(usernameWrapper, passwordWrapper, signupLink, submitBtn);
 
   return form;
 };
