@@ -1,6 +1,7 @@
 import { login } from "../../apis/auth";
 import { tokenName } from "../libs/constants";
 import { router } from "../main";
+import { checkExpireToken } from "../utils/errors";
 import {
   backIcon,
   emailIcon,
@@ -66,6 +67,7 @@ const isPasswordValid = (value) => {
 
 export const customForm = () => {
   const form = document.createElement("form");
+  form.autocomplete='off'
   form.className = "w-full mt-[48px] flex flex-col gap-[21px]";
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -79,6 +81,7 @@ export const customForm = () => {
       router.navigate('/');
     } catch (error) {
       console.log(error.response.data.message);
+      checkExpireToken(error)
       vanillaToast.error(error.response.data.message);
       e.target.username.value = "";
       e.target.password.value = "";

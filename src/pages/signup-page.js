@@ -1,6 +1,7 @@
-import { login, signup } from "../../apis/auth";
+import { signup } from "../../apis/auth";
 import { tokenName } from "../libs/constants";
 import { router } from "../main";
+import { checkExpireToken } from "../utils/errors";
 import {
   backIcon,
   emailIcon,
@@ -66,6 +67,7 @@ const isPasswordValid = (value) => {
 
 export const customForm = () => {
   const form = document.createElement("form");
+  form.autocomplete = "off";
   form.className = "w-full mt-[48px] flex flex-col gap-[21px]";
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -75,11 +77,12 @@ export const customForm = () => {
     try {
       const resBody = await signup(data);
       localStorage.setItem(tokenName, resBody.token);
-      vanillaToast.success("welcome "+ resBody.user.username);
+      vanillaToast.success("welcome " + resBody.user.username);
       router.navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
       vanillaToast.error(error.response.data.message);
+      checkExpireToken(error);
       e.target.username.value = "";
       e.target.password.value = "";
       form.getElementsByTagName("button")[1].setAttribute("disabled", "true");
