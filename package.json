@@ -14,7 +14,11 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.6",
     "@tailwindcss/vite": "^4.1.6",
+    "@webdevaaron/vanilla-toast": "^0.7.3",
+    "axios": "^1.9.0",
+    "navigo": "^8.11.1",
     "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.6"
+    "tailwindcss": "^4.1.6",
+    "vanilla-toast": "^0.5.0"
   }
 }
