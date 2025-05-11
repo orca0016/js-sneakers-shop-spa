@@ -32,7 +32,8 @@
 }
 
 #vanilla-toast.success {
-  background: rgba(92, 184, 92, 0.76);
+  border: 3px solid rgb(0, 255, 0);
+  background-color: #212529;
 }
 
 #vanilla-toast.info {
@@ -44,6 +45,6 @@
 }
 
 #vanilla-toast.error {
-  border:3px solid   rgb(255, 8, 0);
-background-color: #212529;
+  border: 3px solid rgb(255, 8, 0);
+  background-color: #212529;
 }

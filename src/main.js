@@ -4,7 +4,7 @@ import "./style.css";
 import Navigo from "navigo";
 import { signupPage } from "./pages/signup-page";
 
-const router = new Navigo("/");
+export const router = new Navigo("/");
 router
   .on("/login", () => {
     loginPage();

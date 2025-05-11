@@ -1,4 +1,4 @@
-import { login } from "../../apis/auth";
+import { login, signup } from "../../apis/auth";
 import { tokenName } from "../libs/constants";
 import { router } from "../main";
 import {
@@ -73,10 +73,10 @@ export const customForm = () => {
     const password = e.target.password.value;
     const data = { username, password };
     try {
-      const resBody = await login(data);
+      const resBody = await signup(data);
       localStorage.setItem(tokenName, resBody.token);
       vanillaToast.success("welcome "+ resBody.user.username);
-      router.navigate('/');
+      router.navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
       vanillaToast.error(error.response.data.message);
@@ -85,6 +85,7 @@ export const customForm = () => {
       form.getElementsByTagName("button")[1].setAttribute("disabled", "true");
     }
   });
+
   const usernameWrapper = createInputField(
     "text",
     "username",
@@ -103,7 +104,7 @@ export const customForm = () => {
 
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
-  submitBtn.innerText = "Login";
+  submitBtn.innerText = "Signup";
   submitBtn.className =
     "w-full bg-dark-gray rounded-3xl h-[47px] text-white text-[14px] mt-[288px] cursor-pointer disabled:bg-disable-btn";
   submitBtn.setAttribute("disabled", "true");
@@ -131,18 +132,18 @@ export const customForm = () => {
   usernameInput.addEventListener("input", validateForm);
   passwordInput.addEventListener("input", validateForm);
 
-  const signupLink = document.createElement("a");
-  signupLink.href = "/signup";
-  signupLink.setAttribute("data-navigo", true);
-  signupLink.className = "text-center text-[14px] font-[500]";
-  signupLink.innerText = "Signup";
+  const signinLink = document.createElement("a");
+  signinLink.href = "/login";
+  signinLink.setAttribute("data-navigo", true);
+  signinLink.className = "text-center text-[14px] font-[500]";
+  signinLink.innerText = "Login";
 
-  form.append(usernameWrapper, passwordWrapper, signupLink, submitBtn);
+  form.append(usernameWrapper, passwordWrapper, signinLink, submitBtn);
 
   return form;
 };
 
-export function loginPage() {
+export function signupPage() {
   const htmlLogin = `
     <div class="min-h-screen bg-white-card flex items-center flex-col relative px-[24px] pb-[32px]">
       <button class="absolute left-[12px] top-[12px]">
@@ -151,7 +152,7 @@ export function loginPage() {
       <div class="mt-[132px]">
         ${logoIcon()}
       </div>
-      <h2 class="text-[32px] font-[600] mt-[118px] text-[#152536]">Login to Your Account</h2>
+      <h2 class="text-[32px] font-[600] mt-[118px] text-[#152536]">Signup to Your Account</h2>
       <div id="form-login" class="w-full"></div>
     </div>
   `;
