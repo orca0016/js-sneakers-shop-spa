@@ -58,6 +58,7 @@ const showSlide = () => {
   nextBtn.addEventListener("click", () => {
     if (currentPage === 2) {
       router.navigate("/login");
+      localStorage.setItem('show-onboard' , 'true')
     } else {
       currentPage++;
       showSlide();
