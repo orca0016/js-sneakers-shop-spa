@@ -18,6 +18,7 @@ const showBtns = () => {
     btnLine.addEventListener("click", () => {
       currentPage = i;
       showSlide();
+      textOverlayAnimation(".title-onboarding", "h2", 0.2);
     });
     buttons.appendChild(btnLine);
   }
@@ -45,7 +46,7 @@ const showSlide = () => {
             <img src="${arrayCards[i].imagePath}" class="w-full  animate-fades"  id="image-1" alt="wallpaper">
         </div>
         <div class="px-[24px] py-[32px] text-center">
-                <h2 class="text-[32px]">${arrayCards[i].message}</h2>
+                <h2 class="text-[32px] title-onboarding">${arrayCards[i].message}</h2>
                 <div id='buttons' class="mt-[60px] w-full flex justify-center gap-[6px]">
                 </div>
                 <div class='mt-[40px]' id='next-btn'>
@@ -58,15 +59,17 @@ const showSlide = () => {
   nextBtn.addEventListener("click", () => {
     if (currentPage === 2) {
       router.navigate("/login");
-      localStorage.setItem('show-onboard' , 'true')
+      localStorage.setItem("show-onboard", "true");
     } else {
       currentPage++;
       showSlide();
       showBtns();
     }
+    textOverlayAnimation(".title-onboarding", "h2", 0.2);
   });
 
   showBtns();
+
 };
 
 export const onboarding = () => {
@@ -123,16 +126,20 @@ export const onboarding = () => {
     `;
   app.innerHTML = template;
 
-  textOverlayAnimation(".text-animation");
+  textOverlayAnimation(".text-animation", "span", 0.5);
   let tl = gsap.timeline({ delay: 1 });
   tl.to("#onboard-1", { duration: 1, opacity: 1 }, 0.5);
   tl.to("#onboard-1", { duration: 1, display: "none", opacity: 0 });
-  tl.to("#onboard-2", { duration: 1, display: "flex" });
-  tl.to("#onboard-2", { duration: 3, opacity: 1 });
-  tl.to("#onboard-2", { duration: 1, display: "none", opacity: 1 });
+  tl.to("#onboard-2", { duration: 0.5, display: "flex" });
+  tl.to("#onboard-2", { duration: 4, opacity: 1 });
+  tl.to("#onboard-2", { duration: 0.5, display: "none", opacity: 1 });
   tl.to("#onboard-3", { duration: 0.2, display: "block", opacity: 0 });
   tl.to("#onboard-3", { duration: 1, opacity: 1 });
 
+
   showSlide();
   showBtns();
+    setTimeout(()=>{
+    textOverlayAnimation(".title-onboarding", "h2", 0.2);
+  },8000)
 };
