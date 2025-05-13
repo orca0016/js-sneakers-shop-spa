@@ -1,4 +1,4 @@
-import { getAllPRoducts } from "../../apis/products";
+import { getAllBrands, getAllPRoducts } from "../../apis/products";
 import { getUserInfo } from "../../apis/user";
 import { showProduct } from "../layouts/showProduct";
 import { checkExpireToken } from "../utils/errors";
@@ -12,7 +12,7 @@ import {
   personIcon,
   walletIcon,
 } from "../utils/icons";
-
+let brandSort = "All";
 const showUserInformation = async () => {
   let infoData;
   try {
@@ -24,26 +24,33 @@ const showUserInformation = async () => {
   }
   return infoData;
 };
-function infiniteCardHandling() {
+
+function infiniteCardHandling(isRerender) {
   let isFetching = false;
   let currentPage = 1;
-  let currentCol = 1;
-
+  let lengthData 
   const loader = document.getElementById("loader");
 
   // Functions
-  const fetchImages = async () => {
+  const fetchProducts = async () => {
     loader.classList.add("show");
     isFetching = true;
-    const images = await getAllPRoducts(`?page=${currentPage}&limit=10`);
+    const images = await getAllPRoducts(
+      `?page=${currentPage}&limit=10${
+        brandSort !== "All" ? `&brands=${brandSort}` : ""
+      }`
+    );
+    console.log(images , brandSort);
+lengthData=images.data.length
     updateDom(images.data);
     currentPage++;
     isFetching = false;
     loader.classList.remove("show");
   };
-  fetchImages();
+  fetchProducts();
 
   const updateDom = (images) => {
+    if (isRerender) document.getElementById(`images-container`).innerHTML = "";
     images.forEach((item) => {
       const imageContainer = document.createElement("div");
       imageContainer.classList.add("image-wrapper");
@@ -53,16 +60,17 @@ function infiniteCardHandling() {
         showProduct(item);
 
         // change color of like button in product Page
-        let flag =true
+        let flag = true;
         document.getElementById("like-product").onclick = () => {
-            if (flag) {
-                document.getElementById("like-product").innerHTML = heartIcon("red");
-                
-                flag=false
-            }else{
-                document.getElementById("like-product").innerHTML = heartIcon();
-                flag=true
-            }
+          if (flag) {
+            document.getElementById("like-product").innerHTML =
+              heartIcon("red");
+
+            flag = false;
+          } else {
+            document.getElementById("like-product").innerHTML = heartIcon();
+            flag = true;
+          }
         };
       });
       const divContent = `
@@ -80,13 +88,7 @@ function infiniteCardHandling() {
       divWrapper.innerHTML = divContent;
       imageContainer.appendChild(divWrapper);
 
-      if (currentCol === 5) {
-        currentCol = 1;
-      }
-
       document.getElementById(`images-container`).appendChild(imageContainer);
-
-      currentCol++;
 
       setTimeout(() => {
         imageContainer.classList.remove("loading");
@@ -101,9 +103,9 @@ function infiniteCardHandling() {
     // Scrolled to bottom
     if (
       window.innerHeight + window.scrollY >=
-      document.body.offsetHeight - 10
+      document.body.offsetHeight - 10 && lengthData > 10
     ) {
-      await fetchImages();
+      await fetchProducts();
     }
   });
   const el = document.getElementById("username-header");
@@ -143,6 +145,7 @@ const header = () => {
     `;
   return headerElement;
 };
+
 const footer = () => {
   return `
 <footer class='fixed bottom-0 left-0 w-full'>
@@ -171,10 +174,63 @@ const footer = () => {
 </footer>
 `;
 };
+const fetchBrands = async () => {
+  try {
+    const data = await getAllBrands();
+    console.log(data);
+    brandingButtons(data);
+  } catch (error) {
+    checkExpireToken();
+    console.log(error);
+  }
+};
+const brandingButtons = (data) => {
+  const listDataBrands = [...data];
+  const listBrands = document.getElementById("list-brands");
+  listDataBrands?.unshift("All");
+  console.log(listDataBrands);
+  listDataBrands?.forEach((item) => {
+    const btn = document.createElement("button");
+    btn.className =
+      "ship-brands rounded-[25px]  px-[20px] text-[16px]  font-[600]  text-[#343A40] border border-[#343A40] min-h-[10px] py-[10px] flex items-center cursor-pointer text-nowrap";
+    if (item === brandSort) {
+      btn.classList.add("bg-[#343A40]");
+      btn.classList.add("text-white");
+    }
+    btn.dataset.brandSort = item;
+    btn.addEventListener("click", () => {
+      const shipBrands = document.getElementsByClassName("ship-brands");
+      brandSort = item;
+
+      for (let brandItem of shipBrands) {
+        if (brandSort === brandItem.dataset.brandSort) {
+          brandItem.classList.add("bg-[#343A40]", "text-white");
+          brandItem.classList.remove("text-[#343A40]");
+        } else {
+          brandItem.classList.remove("bg-[#343A40]", "text-white");
+          brandItem.classList.add("text-[#343A40]");
+        }
+      }
+      infiniteCardHandling(true);
+    });
+    btn.innerText = item;
+    listBrands.appendChild(btn);
+  });
+};
+
 export const homePage = () => {
   const htmlElement = `
     <div class='bg-white relative'>
-    ${header()}        
+    ${header()}
+    <div class='px-[24px]'>
+      <div class='flex justify-between mb-[20px]'>
+        <h2>Most Popular </h2>
+        <h2>See All</h2>
+      </div>
+      <div id='list-brands' class='w-full overflow-auto flex h-[50px]  gap-x-[12px] mb-[24px] '>
+      </div>
+    </div>
+    
     <main class='min-h-[100vh] pb-10'>
 
     <div id="images-container" class=" grid grid-cols-2 gap-x-[16px] gap-y-[24px] px-[24px]">
@@ -192,5 +248,6 @@ export const homePage = () => {
   document.getElementById("app").innerHTML = htmlElement;
 
   showUserInformation();
+  fetchBrands();
   infiniteCardHandling();
 };

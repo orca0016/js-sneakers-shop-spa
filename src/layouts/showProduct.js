@@ -13,7 +13,7 @@ import {
   plusIcon,
   starIcon,
 } from "../utils/icons";
-let productColor = "white";
+let productColor = "black";
 let productSize = "41";
 let productQuantity = 1;
 const handleChangeSizeButtons = (currentSize) => {
@@ -31,11 +31,10 @@ const handleChangeSizeButtons = (currentSize) => {
 };
 const handleChangeColorButtons = (currentColor) => {
   const buttons = document.getElementsByClassName("btns-color-selected");
-
   for (let item of buttons) {
-    if (item.dataset.currentColor === currentColor) {
+    if (item.dataset.currentColor === currentColor) {      
       item.style.color =
-        item.dataset.currentColor === "black" ? "white" : "black";
+      item.dataset.currentColor === "black" ? "white" : "black";
     } else {
       item.style.color = item.dataset.currentColor;
     }
@@ -54,26 +53,29 @@ const createFormAddProduct = (data) => {
       "p-[10px] w-[40px] h-[40px]  flex items-center justify-center  rounded-full   shadow-xl cursor-pointer  btns-color-selected ";
     buttonColor.type = "button";
     buttonColor.innerHTML = checkIcon();
+    handleChangeColorButtons(productColor);
     buttonColor.addEventListener("click", () => {
       productColor = element;
-      handleChangeColorButtons(element);
+      
+      handleChangeColorButtons(productColor);
     });
     colorBtns.appendChild(buttonColor);
   });
   //create size select buttons
   const sizeBtns = document.getElementById("size-btns");
-  const sizeData =  data.sizes.split("|");
+  const sizeData = data.sizes.split("|");
 
   sizeData.forEach((element) => {
     const buttonSize = document.createElement("button");
     buttonSize.textContent = element;
+    buttonSize.dataset.currentSize = element;
     buttonSize.className =
       "p-[10px] w-[40px] h-[40px]  flex items-center justify-center  rounded-full border  shadow-xl cursor-pointer btns-size-selected";
     buttonSize.type = "button";
+    handleChangeSizeButtons(productSize);
     buttonSize.addEventListener("click", () => {
       productSize = element;
-      buttonSize.dataset.currentSize = element;
-      handleChangeSizeButtons(element);
+      handleChangeSizeButtons(productSize);
     });
     sizeBtns.appendChild(buttonSize);
   });
@@ -106,7 +108,7 @@ const createFormAddProduct = (data) => {
     .addEventListener("submit", (e) => {
       e.preventDefault();
       const userCard = JSON.parse(localStorage.getItem("card-shop"));
-      if ( !!userCard && userCard.find((item) => item.id === data.id)) {
+      if (!!userCard && userCard.find((item) => item.id === data.id)) {
         vanillaToast.error("This product is already in your cart.");
       } else {
         const newProduct = {
@@ -131,8 +133,6 @@ const createFormAddProduct = (data) => {
 export function showProduct(data) {
   const modal = document.getElementById("product-modal");
   const content = document.getElementById("product-modal-content");
-
-  console.log(data);
 
   content.innerHTML = `
     <button id="close-modal" class="absolute top-[20px] left-[20px] z-10">${backIcon()}</button>
@@ -200,7 +200,7 @@ export function showProduct(data) {
   document.getElementById("body").style.overflow = "hidden";
   createFormAddProduct(data);
   document.getElementById("close-modal").onclick = () => {
-    productColor = "white";
+    productColor = "black";
     productSize = "41";
     productQuantity = 1;
     gsap.to(modal, {

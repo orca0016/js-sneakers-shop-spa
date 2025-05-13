@@ -6,3 +6,8 @@ export const getAllPRoducts = async (query) => {
   const response = await axiosInstance.get(urls.products.sneaker+query);
   return response.data;
 };
+export const getAllBrands = async () => {
+  const axiosInstance = generateHttpClient();
+  const response = await axiosInstance.get(urls.products.brand);
+  return response.data;
+};
