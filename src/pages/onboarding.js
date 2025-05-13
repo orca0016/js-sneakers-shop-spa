@@ -18,7 +18,7 @@ const showBtns = () => {
     btnLine.addEventListener("click", () => {
       currentPage = i;
       showSlide();
-      textOverlayAnimation(".title-onboarding", "h2", 0.2);
+      textOverlayAnimation(".title-onboarding", "h2", 0);
     });
     buttons.appendChild(btnLine);
   }
@@ -65,7 +65,7 @@ const showSlide = () => {
       showSlide();
       showBtns();
     }
-    textOverlayAnimation(".title-onboarding", "h2", 0.2);
+    textOverlayAnimation(".title-onboarding", "h2", 0);
   });
 
   showBtns();
@@ -140,6 +140,6 @@ export const onboarding = () => {
   showSlide();
   showBtns();
     setTimeout(()=>{
-    textOverlayAnimation(".title-onboarding", "h2", 0.2);
-  },8000)
+    textOverlayAnimation(".title-onboarding", "h2", 0);
+  },9000)
 };

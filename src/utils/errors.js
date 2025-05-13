@@ -1,9 +1,11 @@
+import { router } from "../main";
 
-export function checkExpireToken (error){
-      if (error.status === 403) {
+export function checkExpireToken (status){
+      if (status === 403) {
           setTimeout(() => {
-            location.href = "/login";
-          }, 3000);
+             router.navigate('/login');
+             vanillaToast.error("you are need to be login ");
+          }, 1000);
         }
 
   }

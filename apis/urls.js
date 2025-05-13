@@ -15,4 +15,7 @@ export const urls = {
   user: {
     info: "/user",
   },
+  products:{
+    sneaker:'/sneaker'
+  }
 };

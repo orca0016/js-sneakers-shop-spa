@@ -81,7 +81,7 @@ export const customForm = () => {
       router.navigate('/');
     } catch (error) {
       console.log(error.response.data.message);
-      checkExpireToken(error)
+      checkExpireToken(error.response.status)
       vanillaToast.error(error.response.data.message);
       e.target.username.value = "";
       e.target.password.value = "";

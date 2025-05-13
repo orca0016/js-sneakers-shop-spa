@@ -13,6 +13,7 @@ if (!localStorage.getItem("show-onboard")) {
   router.navigate("/");
 } else if (!localStorage.getItem(tokenName)) {
   router.navigate("/login");
+  vanillaToast.error("you are need to be login ");
 }
 
 router

@@ -82,7 +82,7 @@ export const customForm = () => {
     } catch (error) {
       console.log(error.response.data.message);
       vanillaToast.error(error.response.data.message);
-      checkExpireToken(error);
+      checkExpireToken(error.response.status);
       e.target.username.value = "";
       e.target.password.value = "";
       form.getElementsByTagName("button")[1].setAttribute("disabled", "true");
