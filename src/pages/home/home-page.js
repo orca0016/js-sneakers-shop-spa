@@ -3,20 +3,14 @@ import { fetchBrands } from "./brandFilter";
 import { footer } from "./footer";
 import { header, showUserInformation } from "./heaer";
 import { infiniteCardHandling } from "./productList";
+import { searchSection } from "./searchSection";
 
 export const homePage = async () => {
   const htmlElement = `
     <div class='bg-white relative'>
     ${header()}
     <div class='py-[6px] px-[24px]'>
-        <a href="/search" data-navigo>
-        <div class='relative'>
-        <input class='cursor-pointer w-full bg-white-input placeholder:text-[#BAB8BC] py-[8px] px-[12px] pl-[30px] rounded-sm' placeholder="Search"/>
-        <span class='absolute left-2 inset-y-3'>
-        ${searchIcon()}
-        </span>
-        </div>
-        </a>
+    <div class='relative' id='search-container'></div>
     </div>
     <div class='px-[24px]'>
       <div class='flex justify-between mb-[20px]'>
@@ -43,6 +37,7 @@ export const homePage = async () => {
   document.getElementById("app").innerHTML = htmlElement;
 
   showUserInformation();
+  searchSection();
   await fetchBrands();
   infiniteCardHandling();
 };

@@ -65,13 +65,17 @@ export function infiniteCardHandling(isRerender) {
     try {
       loader.classList.add("show");
       isFetching = true;
-      const images = await getAllPRoducts(
+
+      // console.log(state.brandSort);
+      const products = await getAllPRoducts(
         `?page=${currentPage}&limit=10${
           state.brandSort !== "All" ? `&brands=${state.brandSort}` : ""
         }`
       );
-      lengthData = images.data.length;
-      updateCardProducts(images.data);
+      // console.log(products);
+
+      lengthData = products.data.length;
+      updateCardProducts(products.data);
       currentPage++;
       isFetching = false;
       loader.classList.remove("show");
