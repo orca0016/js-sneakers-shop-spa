@@ -3,9 +3,10 @@ import "./style.css";
 
 import Navigo from "navigo";
 import { tokenName } from "./libs/constants";
-import { homePage } from "./pages/home-page";
+import { homePage } from "./pages/home/home-page";
 import { onboarding } from "./pages/onboarding";
 import { signupPage } from "./pages/signup-page";
+
 
 export const router = new Navigo("/");
 // guard
