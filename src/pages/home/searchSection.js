@@ -113,6 +113,7 @@ export const renderRowHistory = () => {
           "history-search",
           JSON.stringify([...history, newHistory])
         );
+        document.getElementById("body").style.overflow = "auto";
         handleLengthHistory();
         router.navigate("/search");
       });
@@ -127,6 +128,7 @@ export const renderRowHistory = () => {
       );
       localStorage.setItem("history-search", JSON.stringify(reSearch));
       wrapperList.innerHTML = "";
+      document.getElementById("body").style.overflow = "auto";
       renderRowHistory();
     });
   }

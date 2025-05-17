@@ -82,10 +82,7 @@ export function infiniteCardHandling(isRerender) {
       window.innerHeight + window.scrollY >=
       document.body.offsetHeight - 10
     ) {
-      if (
-        location.pathname === "/" ||
-        location.pathname === "/search"
-      ) {
+      if (location.pathname === "/") {
         await fetchProducts();
       }
     }
