@@ -17,6 +17,7 @@ export const urls = {
   },
   products:{
     sneaker:'/sneaker',
-    brand:'/sneaker/brands'
+    brand:'/sneaker/brands',
+    product: (id)=> `/sneaker/item/${id}`
   }
 };

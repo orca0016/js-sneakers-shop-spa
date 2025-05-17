@@ -1,4 +1,3 @@
-import { searchIcon } from "../../utils/icons";
 import { fetchBrands } from "./brandFilter";
 import { footer } from "./footer";
 import { header, showUserInformation } from "./heaer";
@@ -27,10 +26,7 @@ export const homePage = async () => {
     </div>
     <div id="loader" class="loader"></div>
   </main>
-   <div id="product-modal" class="fixed w-full h-screen top-0 left-0 bg-white z-50 hidden  overflow-y-scroll">
-        <div id="product-modal-content" class="max-w-[450px] mx-auto relative ">
-        </div>
-    </div>
+   
   ${footer()}
     </div>
     `;

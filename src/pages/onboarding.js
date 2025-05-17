@@ -43,14 +43,20 @@ const showSlide = () => {
     if (i === currentPage) {
       nextCards.innerHTML = ` <div>
         <div class="overflow-hidden w-full h-[550px]">
-            <img src="${arrayCards[i].imagePath}" class="w-full  animate-fades"  id="image-1" alt="wallpaper">
+            <img src="${
+              arrayCards[i].imagePath
+            }" class="w-full  animate-fades opacity-0" style="animation-delay:0.5s;"  id="image-1" alt="wallpaper">
         </div>
         <div class="px-[24px] py-[32px] text-center">
-                <h2 class="text-[32px] title-onboarding">${arrayCards[i].message}</h2>
+                <h2 class="text-[30px] title-onboarding">${
+                  arrayCards[i].message
+                }</h2>
                 <div id='buttons' class="mt-[60px] w-full flex justify-center gap-[6px]">
                 </div>
                 <div class='mt-[40px]' id='next-btn'>
-                <button class="bg-dark-gray rounded-4xl w-full mt-[40px] text-white h-[47px] py-[12px] px-[16px]">Next</button>
+                <button class="bg-dark-gray rounded-4xl w-full mt-[40px] text-white h-[47px] py-[12px] px-[16px]">
+                  ${i === 2 ? "Get started" : "Next"}
+                </button>
                 </div>
         </div>`;
     }
@@ -69,7 +75,6 @@ const showSlide = () => {
   });
 
   showBtns();
-
 };
 
 export const onboarding = () => {
@@ -127,19 +132,42 @@ export const onboarding = () => {
   app.innerHTML = template;
 
   textOverlayAnimation(".text-animation", "span", 0.5);
-  let tl = gsap.timeline({ delay: 1 });
-  tl.to("#onboard-1", { duration: 1, opacity: 1 }, 0.5);
-  tl.to("#onboard-1", { duration: 1, display: "none", opacity: 0 });
-  tl.to("#onboard-2", { duration: 0.5, display: "flex" });
-  tl.to("#onboard-2", { duration: 4, opacity: 1 });
-  tl.to("#onboard-2", { duration: 0.5, display: "none", opacity: 1 });
-  tl.to("#onboard-3", { duration: 0.2, display: "block", opacity: 0 });
-  tl.to("#onboard-3", { duration: 1, opacity: 1 });
+  let tl = gsap.timeline({ delay: 0.5 });
 
+  // اسلاید اول - ظاهر شدن با scale + fade
+  tl.fromTo(
+    "#onboard-1",
+    { opacity: 0, scale: 0.95 },
+    { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
+  );
+
+  // اسلاید اول - محو شدن
+  tl.to("#onboard-1", { opacity: 0, duration: 0.8, ease: "power1.in" });
+  tl.set("#onboard-1", { display: "none" });
+
+  // اسلاید دوم - ظاهر شدن
+  tl.set("#onboard-2", { display: "flex", opacity: 0 });
+  tl.to("#onboard-2", { opacity: 1, duration: 1.2, ease: "power2.out" });
+
+  // اسلاید دوم - باقی بمونه ۳ ثانیه
+  tl.to("#onboard-2", { duration: 3 }, "+=0.5");
+
+  // اسلاید دوم - محو
+  tl.to("#onboard-2", { opacity: 0, duration: 0.8, ease: "power1.in" });
+  tl.set("#onboard-2", { display: "none" });
+
+  // اسلاید سوم - ظاهر شدن با انیمیشن نرم
+  tl.set("#onboard-3", { display: "block", opacity: 0, scale: 0.95 });
+  tl.to("#onboard-3", {
+    opacity: 1,
+    scale: 1,
+    duration: 1.2,
+    ease: "power2.out",
+  });
 
   showSlide();
   showBtns();
-    setTimeout(()=>{
+  setTimeout(() => {
     textOverlayAnimation(".title-onboarding", "h2", 0);
-  },9000)
+  }, 9000);
 };

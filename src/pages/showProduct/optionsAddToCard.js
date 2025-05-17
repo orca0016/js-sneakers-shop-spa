@@ -1,5 +1,6 @@
 // import { optionCard } from "../showProduct";
 import optionCard from "../../libs/globalState";
+import { showToast } from "../../utils/toasts/toast";
 import {
   createColorOption,
   createSizeOption,
@@ -24,10 +25,8 @@ export const createFormAddProduct = (data) => {
       e.preventDefault();
       const userCard = JSON.parse(localStorage.getItem("card-shop"));
       if (!!userCard && userCard.find((item) => item.id === data.id)) {
-        vanillaToast.error("This product is already in your cart.");
+        showToast("This product is already in your cart.", "danger");
       } else {
-        console.log(optionCard);
-
         const newProduct = {
           id: data.id,
           name: data.name,
@@ -43,7 +42,7 @@ export const createFormAddProduct = (data) => {
             ? JSON.stringify([...userCard, newProduct])
             : JSON.stringify([newProduct])
         );
-        vanillaToast.success("Product added to the card shop");
+        showToast("Product added to the card shop.", "success");
       }
     });
 };

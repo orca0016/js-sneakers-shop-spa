@@ -32,12 +32,18 @@
       opacity: 100%;
     }
   }
-  --animate-fades: fadess 1s ease-in-out;
+  --animate-fades: fadess 1s ease-in-out forwards;
   @keyframes fadess {
     0% {
       transform: scale(2);
+      opacity: 0;
+    }
+    60%{
+      opacity: 100%;
+      
     }
     100% {
+      opacity: 100%;
       transform: scale(1);
     }
   }
@@ -50,6 +56,7 @@ main .images-container .image-wrapper img{
     width: 100%;
     max-height: 250px;
     object-fit: cover;
+    animation: forwards;
 }
 
 main .images-container .image-wrapper.loading{
@@ -116,4 +123,7 @@ main .loader.show{
 }
 .btn-inactive {
   @apply text-[#343A40];
+}
+.test{
+  max-width: fit-content !important;
 }

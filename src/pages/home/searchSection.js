@@ -3,7 +3,13 @@ import { router } from "../../main";
 import { closeIcon, searchIcon } from "../../utils/icons";
 
 let reSearch = JSON.parse(localStorage.getItem("history-search")) || [];
-
+export const handleLengthHistory = () => {
+  let list = JSON.parse(localStorage.getItem("history-search"));
+  if (list.length > 10) {
+    list.shift();
+    localStorage.setItem("history-search", JSON.stringify(list));
+  }
+};
 const handelLocalSearchHistory = (e) => {
   const newData = {
     id: uuidv4(),
@@ -13,11 +19,8 @@ const handelLocalSearchHistory = (e) => {
     "history-search",
     JSON.stringify(reSearch ? [...reSearch, newData] : [newData])
   );
-  reSearch = JSON.parse(localStorage.getItem("history-search"));
-  if (reSearch.length > 10) {
-    reSearch.shift();
-    localStorage.setItem("history-search", JSON.stringify(reSearch));
-  }
+  handleLengthHistory();
+
   router.navigate("/search");
 };
 const createInputSearch = (divHistoryResults) => {
@@ -58,6 +61,7 @@ export const searchSection = () => {
   form.autocomplete = "off";
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    document.getElementById("body").style.overflow = "auto";
     handelLocalSearchHistory(e);
   });
 
@@ -83,18 +87,38 @@ export const searchSection = () => {
   searchContainer.appendChild(form);
   renderRowHistory();
 };
-const renderRowHistory = () => {
+export const renderRowHistory = () => {
   const wrapperList = document.getElementById("wrapper-list-history-search");
-  reSearch.forEach((item) => {
+  const searchItem = JSON.parse(localStorage.getItem("history-search")) || [];
+  wrapperList.innerHTML = "";
+  searchItem.forEach((item) => {
     wrapperList.innerHTML += `
     <div class='flex justify-between text-[#757575]  text-[1.2rem] py-1'>
-     <span >${item.name}</span>
+     <span class='history-items' >${item.name}</span>
      <button type="button" listId='${
        item.id
      }' class='remove-history-btns cursor-pointer'>${closeIcon()}</button>   
     </div>  
     `;
+
+    const historyItems = document.getElementsByClassName("history-items");
+    for (let item of historyItems) {
+      item.addEventListener("click", () => {
+        const newHistory = {
+          name: item.textContent,
+          id: uuidv4(),
+        };
+        const history = JSON.parse(localStorage.getItem("history-search"));
+        localStorage.setItem(
+          "history-search",
+          JSON.stringify([...history, newHistory])
+        );
+        handleLengthHistory();
+        router.navigate("/search");
+      });
+    }
   });
+
   const removeBtns = document.getElementsByClassName("remove-history-btns");
   for (let item of removeBtns) {
     item.addEventListener("click", () => {

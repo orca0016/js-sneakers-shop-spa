@@ -1,30 +1,33 @@
-import gsap from "gsap/all";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import {Pagination } from "swiper/modules";
 import optionCard from "../../libs/globalState";
 import {
   backIcon,
   bagIcon2,
-  checkIcon,
-  heartIcon,
   minusIcon,
   plusIcon,
   starIcon,
 } from "../../utils/icons";
-import {
-  handleChangeColorButtons,
-  handleChangeSizeButtons,
-} from "./buttonOptions";
+import { addFavorite } from "../../utils/likeHandeling";
 import { createFormAddProduct } from "./optionsAddToCard";
+import { getPRoduct } from "../../../apis/products";
+import { checkExpireToken } from "../../utils/errors";
+import { router } from "../../main";
 
-export function showProduct(data) {
-  const modal = document.getElementById("product-modal");
-  const content = document.getElementById("product-modal-content");
-
-  content.innerHTML = `
+export  async function renderProduct (data){
+    try {
+    const product = await getPRoduct(data.id)
+    showProduct(product)
+  } catch (error) {
+    console.log(error);
+    checkExpireToken(error.response.request.status);
+  }
+}
+ function showProduct(data) {
+  document.getElementById("app").innerHTML = `
     <button id="close-modal" class="absolute top-[20px] left-[20px] z-10">${backIcon()}</button>
     <div class="swiper mySwiper" >
       <div class="swiper-wrapper">
@@ -40,7 +43,7 @@ export function showProduct(data) {
     <div class='px-[25px] pt-4'>
         <div class='flex justify-between items-center py-2  '>
             <h2 class='text-xl font-bold  text-[1.4rem]'>${data.name}</h2>
-            <button id="like-product">${heartIcon()}</button>
+            <button id="like-product" ></button>
         </div>
         <div class='flex items-center py-2 border-b border-gray-line gap-5' >
             <span class='px-2 py-1 bg-[#ECECED] rounded-sm text-sm' >5.371</span>
@@ -87,24 +90,19 @@ export function showProduct(data) {
     </div>
   `;
 
-  modal.classList.remove("hidden");
-  gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-  document.getElementById("body").style.overflow = "hidden";
+  // handling the like btn
+  addFavorite(data);
+
+
   createFormAddProduct(data, optionCard);
   document.getElementById("close-modal").onclick = () => {
     optionCard.productColor = "black";
     optionCard.productSize = "41";
     optionCard.productQuantity = 1;
-    gsap.to(modal, {
-      opacity: 0,
-      duration: 0.2,
-      onComplete: () => {
-        modal.classList.add("hidden");
-      },
-    });
-    document.getElementById("body").style.overflow = "auto";
+    router.navigate('/')
   };
 
+  // slider handling
   new Swiper(".mySwiper", {
     pagination: {
       el: ".swiper-pagination",

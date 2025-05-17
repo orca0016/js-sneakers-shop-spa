@@ -2,20 +2,21 @@ import { getUserInfo } from "../../../apis/user";
 import { checkExpireToken } from "../../utils/errors";
 import { bellIcon, heartHeaderIcon } from "../../utils/icons";
 
-
 // Display a specific time of day based on the system clock.
 const showMessageTime = () => {
   const day = new Date();
   const hr = day.getHours();
 
-  if (hr >= 6 && hr <= 11) {
+  if (hr >= 6 && hr < 12) {
     return "Good morning";
-  } else if (hr >= 12 && hr <= 14) {
+  } else if (hr >= 12 && hr < 15) {
     return "Good afternoon";
-  } else if (hr >= 15 && hr <= 19) {
+  } else if (hr >= 15 && hr < 20) {
     return "Good evening";
-  } else if (hr >= 20 && hr <= 5) {
+  } else if (hr >= 20 && hr < 24) {
     return "Good night";
+  } else {
+    return "have a good time";
   }
 };
 export const showUserInformation = async () => {

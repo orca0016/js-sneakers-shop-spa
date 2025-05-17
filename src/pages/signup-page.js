@@ -1,3 +1,4 @@
+import debounce from "debounce";
 import { signup } from "../../apis/auth";
 import { tokenName } from "../libs/constants";
 import { router } from "../main";
@@ -10,6 +11,7 @@ import {
   lockIcon,
   logoIcon,
 } from "../utils/icons";
+import { showToast } from "../utils/toasts/toast";
 
 const updateIconColor = (iconDiv, iconFn, value) => {
   iconDiv.innerHTML = iconFn(value === "" ? "#6C757D" : "#000000");
@@ -30,9 +32,19 @@ const createInputField = (type, name, placeholder, iconFn) => {
   iconDiv.className =
     "absolute left-[12px] top-[10px] bottom-[10px] text-placeholder-text";
   iconDiv.innerHTML = iconFn("#6C757D");
-
+  const showToastDebounced = debounce(() => {
+    if (name === "username") {
+      showToast("Username must be longer than 5", "danger");
+    } else {
+      showToast(
+        "Min 8 character with  at insert  one capital letter  , a number and special character  .",
+        "danger"
+      );
+    }
+  }, 600);
   input.addEventListener("input", (e) => {
     updateIconColor(iconDiv, iconFn, e.target.value);
+    showToastDebounced();
   });
 
   wrapper.appendChild(input);
@@ -77,11 +89,11 @@ export const customForm = () => {
     try {
       const resBody = await signup(data);
       localStorage.setItem(tokenName, resBody.token);
-      vanillaToast.success("welcome " + resBody.user.username);
+      showToast("welcome " + resBody.user.username, "success");
       router.navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
-      vanillaToast.error(error.response.data.message);
+      showToast(error.response.data.message, "danger");
       checkExpireToken(error.response.status);
       e.target.username.value = "";
       e.target.password.value = "";

@@ -1,3 +1,4 @@
+import debounce from "debounce";
 import { login } from "../../apis/auth";
 import { tokenName } from "../libs/constants";
 import { router } from "../main";
@@ -10,6 +11,7 @@ import {
   lockIcon,
   logoIcon,
 } from "../utils/icons";
+import { showToast } from "../utils/toasts/toast";
 
 const updateIconColor = (iconDiv, iconFn, value) => {
   iconDiv.innerHTML = iconFn(value === "" ? "#6C757D" : "#000000");
@@ -31,8 +33,19 @@ const createInputField = (type, name, placeholder, iconFn) => {
     "absolute left-[12px] top-[10px] bottom-[10px] text-placeholder-text";
   iconDiv.innerHTML = iconFn("#6C757D");
 
+  const showToastDebounced = debounce(() => {
+    if (name === "username") {
+      showToast("Username must be longer than 5", "danger");
+    } else {
+      showToast(
+        "Min 8 character with  at insert  one capital letter  , a number and special character  .",
+        "danger"
+      );
+    }
+  }, 600);
   input.addEventListener("input", (e) => {
     updateIconColor(iconDiv, iconFn, e.target.value);
+    showToastDebounced();
   });
 
   wrapper.appendChild(input);
@@ -67,7 +80,7 @@ const isPasswordValid = (value) => {
 
 export const customForm = () => {
   const form = document.createElement("form");
-  form.autocomplete='off'
+  form.autocomplete = "off";
   form.className = "w-full mt-[48px] flex flex-col gap-[21px]";
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -77,12 +90,13 @@ export const customForm = () => {
     try {
       const resBody = await login(data);
       localStorage.setItem(tokenName, resBody.token);
-      vanillaToast.success("welcome "+ resBody.user.username);
-      router.navigate('/');
+      showToast("welcome " + resBody.user.username);
+      // vanillaToast.success("welcome "+ resBody.user.username);
+      router.navigate("/");
     } catch (error) {
       console.log(error.response.data.message);
-      checkExpireToken(error.response.status)
-      vanillaToast.error(error.response.data.message);
+      showToast(error.response.data.message, "danger");
+      checkExpireToken(error.response.status);
       e.target.username.value = "";
       e.target.password.value = "";
       form.getElementsByTagName("button")[1].setAttribute("disabled", "true");

@@ -17,8 +17,6 @@ export function backIcon() {
 export function logoIcon() {
   return `
   <svg
-            width="54"
-            height="81"
             viewBox="0 0 54 81"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -239,4 +237,11 @@ export function closeIcon() {
 </svg>
 
     `;
+}
+export function trashIcon() {
+  return `
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.5 5.99999H3.5M18.833 8.49999L18.373 15.4C18.196 18.054 18.108 19.381 17.243 20.19C16.378 20.999 15.047 21 12.387 21H11.613C8.953 21 7.622 21 6.757 20.19C5.892 19.381 5.803 18.054 5.627 15.4L5.167 8.49999M9.17 3.99999C9.3766 3.41446 9.75974 2.90743 10.2666 2.54878C10.7735 2.19014 11.3791 1.99754 12 1.99754C12.6209 1.99754 13.2265 2.19014 13.7334 2.54878C14.2403 2.90743 14.6234 3.41446 14.83 3.99999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>  
+  `;
 }
