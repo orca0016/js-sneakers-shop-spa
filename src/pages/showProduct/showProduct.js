@@ -99,7 +99,9 @@ export  async function renderProduct (data){
     optionCard.productColor = "black";
     optionCard.productSize = "41";
     optionCard.productQuantity = 1;
-    router.navigate('/')
+    history.back()
+    // const prevUrl = document.referrer.replace('http://localhost:5173' , "")
+    // router.navigate(prevUrl)
   };
 
   // slider handling

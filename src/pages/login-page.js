@@ -162,9 +162,9 @@ export const customForm = () => {
 export function loginPage() {
   const htmlLogin = `
     <div class="min-h-screen bg-white-card flex items-center flex-col relative px-[24px] pb-[32px]">
-      <button class="absolute left-[12px] top-[12px]">
+      <a data-navigo href='/welcome' class="absolute left-[12px] top-[12px]">
         ${backIcon()}
-      </button>
+      </a>
       <div class="mt-[132px]">
         ${logoIcon()}
       </div>

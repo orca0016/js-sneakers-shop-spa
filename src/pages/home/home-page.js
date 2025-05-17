@@ -16,7 +16,7 @@ export const homePage = async () => {
         <h2 class='text-[1.2rem] font-bold'>Most Popular </h2>
         <h2>See All</h2>
       </div>
-      <div id='list-brands' class='w-full overflow-auto flex h-[50px]  gap-x-[12px] mb-[24px] '>
+      <div id='list-brands' class='w-full overflow-x-auto flex py-2  gap-x-[12px] mb-[24px] '>
       </div>
     </div>
     

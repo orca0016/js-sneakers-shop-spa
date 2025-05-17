@@ -1,8 +1,8 @@
 import { heartIcon } from "./icons";
 import { showToast } from "./toasts/toast";
 
-export const addFavorite = (data) => {
-  const likeButton = document.getElementById("like-product");
+export const addFavorite = (data , targetElement="like-product") => {
+  const likeButton = document.getElementById(targetElement);
 
   const getFavorites = () =>
     JSON.parse(localStorage.getItem("favorite-product")) || [];

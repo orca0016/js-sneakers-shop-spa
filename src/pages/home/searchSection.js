@@ -94,7 +94,7 @@ export const renderRowHistory = () => {
   searchItem.forEach((item) => {
     wrapperList.innerHTML += `
     <div class='flex justify-between text-[#757575]  text-[1.2rem] py-1'>
-     <span class='history-items' >${item.name}</span>
+     <span class='history-items cursor-pointer' >${item.name}</span>
      <button type="button" listId='${
        item.id
      }' class='remove-history-btns cursor-pointer'>${closeIcon()}</button>   
