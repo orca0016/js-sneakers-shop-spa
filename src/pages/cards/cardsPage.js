@@ -1,5 +1,15 @@
-import { logoIcon, searchIcon, trashIcon } from "../../utils/icons";
+import { logoIcon, nextIcon, searchIcon, trashIcon } from "../../utils/icons";
 import { footer } from "../home/footer";
+
+const totalPrice = () => {
+  const totalItem = JSON.parse(localStorage.getItem("card-shop")) || [];
+  let totalPrices = 0 
+  totalItem.forEach(item=>{
+    totalPrices+=item.price*item.productQuantity
+  })
+  const contTotalPrice = document.getElementById('total-price-checkout-card')  
+  contTotalPrice.innerText  = `$${totalPrices}`
+};
 const card = (item) => {
   return `<div data-id="${
     item.id
@@ -97,6 +107,7 @@ const removeCard = () => {
       });
     });
   }
+  totalPrice()
 };
 const increaseCardItem = () => {
   let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
@@ -115,6 +126,7 @@ const increaseCardItem = () => {
       });
     });
   }
+  totalPrice()
 };
 const decreaseCardItem = () => {
   let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
@@ -133,6 +145,7 @@ const decreaseCardItem = () => {
       });
     });
   }
+  totalPrice()
 };
 export const cardPage = () => {
   const htmlElement = `
@@ -147,9 +160,7 @@ export const cardPage = () => {
         </div>
       </div>
 
-      <div class='py-10 space-y-6' id='cards-container'>
-       
-      </div>
+      <div class='py-10 pb-40 space-y-6' id='cards-container'></div>
       <div id='dialog-wrapper' class=' hidden fixed w-full h-screen bg-black/60 top-0 left-0 z-[1000]  justify-center items-end'>
         <div  class='content-dialog-card bg-white rounded-t-4xl w-full  px-6 max-w-[400px] pb-8 relative'>
         <div class='absolute left-0 top-2  flex justify-center w-full'>
@@ -165,6 +176,15 @@ export const cardPage = () => {
           </div>
         </div>
       </div>
+      <div class='fixed bottom-9 left-0 w-full p-8'>
+        <div class='max-w-[450px] mx-auto bg-white rounded-t-[30px] border-t border-gray-line grid grid-cols-4 gap-3 px-6 py-6 items-center'>
+          <div class='col-span-1'>
+              <p class='text-gray-text-search text-sm'> Total price</p>
+              <h1 class='' id='total-price-checkout-card'>1532</h1>
+          </div>
+          <a href='/checkout' data-navigo class='col-span-3 text-2xl font-light bg-black shadow-xl px-10 py-4 rounded-full text-white flex items-center justify-center gap-4'>Checkout${nextIcon()}</a>
+        </div>
+      </div>
       ${footer()}
     </div>
   `;
@@ -174,4 +194,5 @@ export const cardPage = () => {
   removeCard();
   increaseCardItem();
   decreaseCardItem();
+  totalPrice()
 };

@@ -28,7 +28,7 @@ export const handleChangeColorButtons = (currentColor) => {
 
 export const createColorOption = (colorData) => {
   const colorBtns = document.getElementById("color-btns");
-    
+
   colorData.forEach((element) => {
     const buttonColor = document.createElement("button");
     buttonColor.style.background = element;
@@ -40,9 +40,7 @@ export const createColorOption = (colorData) => {
     buttonColor.innerHTML = checkIcon();
     handleChangeColorButtons(optionCard.productColor);
     buttonColor.addEventListener("click", () => {
-        optionCard.productColor = element;
-        console.log(optionCard);
-
+      optionCard.productColor = element;
       handleChangeColorButtons(optionCard.productColor);
     });
     colorBtns.appendChild(buttonColor);
@@ -60,15 +58,14 @@ export const createSizeOption = (sizeData) => {
     buttonSize.type = "button";
     handleChangeSizeButtons(optionCard.productSize);
     buttonSize.addEventListener("click", () => {
-      optionCard.productSize = element;      
+      optionCard.productSize = element;
       handleChangeSizeButtons(optionCard.productSize);
     });
     sizeBtns.appendChild(buttonSize);
   });
 };
 
-
-export const quantityProduct =(data)=>{
+export const quantityProduct = (data) => {
   const decreaseQuantity = document.getElementById("decrease-quantity");
   const increaseQuantity = document.getElementById("increase-quantity");
   const showQuantity = document.getElementById("show-quantity");
@@ -91,5 +88,4 @@ export const quantityProduct =(data)=>{
       }`;
     }
   });
-
-} 
+};
