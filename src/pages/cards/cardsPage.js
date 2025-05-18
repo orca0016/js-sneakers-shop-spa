@@ -3,27 +3,28 @@ import { footer } from "../home/footer";
 
 const totalPrice = () => {
   const totalItem = JSON.parse(localStorage.getItem("card-shop")) || [];
-  let totalPrices = 0 
-  totalItem.forEach(item=>{
-    totalPrices+=item.price*item.productQuantity
-  })
-  const contTotalPrice = document.getElementById('total-price-checkout-card')  
-  contTotalPrice.innerText  = `$${totalPrices}`
+  let totalPrices = 0;
+  totalItem.forEach((item) => {
+    totalPrices += item.price * item.productQuantity;
+  });
+  const contTotalPrice = document.getElementById("total-price-checkout-card");
+  contTotalPrice.innerText = `$${totalPrices}`;
 };
-const card = (item) => {
+const card = (item  , isDialogOpen) => {
+  
   return `<div data-id="${
     item.id
-  }" class='flex gap-4 items-center bg-[#f9f9f9] p-4 rounded-2xl shadow-2xl'>
+  }" class='flex gap-4 items-center bg-[#f9f9f9] p-4 rounded-3xl shadow-2xl'>
                 <img src='${
                   item.imageURL
                 }' class='w-[100px] h-[100px] object-cover rounded-2xl' />
                 
                 <div class='flex flex-col flex-1 gap-2'>
                   <div class='flex justify-between items-start'>
-                    <h1 class='font-semibold text-base '>${item.name}</h1>
-                    <button data-id="${
+                    <h1 class='font-semibold text-base line-clamp-1 '>${item.name}</h1>
+                    <button   data-id="${
                       item.id
-                    }" class='remove-button-card'>${trashIcon()}</button>
+                    }" class='remove-button-card ${isDialogOpen? 'hidden':null}'>${trashIcon()}</button>
                   </div>
 
                   <div class='flex items-center text-sm text-gray-600 gap-4'>
@@ -57,7 +58,7 @@ const removeHandling = (product) => {
   const closeDialogCard = document.getElementById("close-dialog-card");
   const contentDialogCards = document.getElementById("content-dialog-cards");
   const removeDialogCard = document.getElementById("remove-dialog-card");
-  contentDialogCards.innerHTML = card(product);
+  contentDialogCards.innerHTML = card(product , true);
   dialogWrapper.classList.remove("hidden");
   dialogWrapper.classList.add("flex");
 
@@ -88,7 +89,7 @@ const renderCard = () => {
 
   cardsContainer.innerHTML = "";
   cardData.forEach((element) => {
-    cardsContainer.innerHTML += card(element);
+    cardsContainer.innerHTML += card(element  );
   });
   removeCard();
   increaseCardItem();
@@ -107,7 +108,7 @@ const removeCard = () => {
       });
     });
   }
-  totalPrice()
+  totalPrice();
 };
 const increaseCardItem = () => {
   let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
@@ -126,7 +127,7 @@ const increaseCardItem = () => {
       });
     });
   }
-  totalPrice()
+  totalPrice();
 };
 const decreaseCardItem = () => {
   let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
@@ -145,7 +146,7 @@ const decreaseCardItem = () => {
       });
     });
   }
-  totalPrice()
+  totalPrice();
 };
 export const cardPage = () => {
   const htmlElement = `
@@ -167,20 +168,18 @@ export const cardPage = () => {
         <span class='rounded-xl bg-[#DADADB] px-6 py-0.5'></span>
         </div>  
           <h1 class='py-6 border-[#E8E8E8] border-b text-center text-2xl font-[500]'>Remove From Cart? </h1>
-          <div class='py-6 border-[#E8E8E8] border-b' id='content-dialog-cards'>
-        
-          </div>
+          <div class='py-6 border-[#E8E8E8] border-b' id='content-dialog-cards'></div>
           <div class='py-4 grid grid-cols-2 px-3 gap-2'>
               <button class='rounded-4xl bg-[#E7E7E7] py-4' id='close-dialog-card'>Cancel</button>
               <button class='rounded-4xl bg-black shadow-2xl py-4 text-white' id='remove-dialog-card'>Yes,Remove</button>
           </div>
         </div>
       </div>
-      <div class='fixed bottom-9 left-0 w-full p-8'>
+      <div class='fixed bottom-16 left-0 w-full '>
         <div class='max-w-[450px] mx-auto bg-white rounded-t-[30px] border-t border-gray-line grid grid-cols-4 gap-3 px-6 py-6 items-center'>
           <div class='col-span-1'>
               <p class='text-gray-text-search text-sm'> Total price</p>
-              <h1 class='' id='total-price-checkout-card'>1532</h1>
+              <h1 class='text-2xl font-bold' id='total-price-checkout-card'>1532</h1>
           </div>
           <a href='/checkout' data-navigo class='col-span-3 text-2xl font-light bg-black shadow-xl px-10 py-4 rounded-full text-white flex items-center justify-center gap-4'>Checkout${nextIcon()}</a>
         </div>
@@ -194,5 +193,5 @@ export const cardPage = () => {
   removeCard();
   increaseCardItem();
   decreaseCardItem();
-  totalPrice()
+  totalPrice();
 };

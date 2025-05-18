@@ -9,6 +9,9 @@ import { signupPage } from "./pages/signup-page";
 import { searchPage } from "./pages/search/search";
 import { cardPage } from "./pages/cards/cardsPage";
 import { renderProduct } from "./pages/showProduct/showProduct";
+import { checkoutPage } from "./pages/checkout/checkoutPage";
+import { addressPage } from "./pages/checkout/address/addressPage";
+import { shippingPage } from "./pages/checkout/shipping/shippinPage";
 
 
 export const router = new Navigo("/");
@@ -44,5 +47,14 @@ router
   })
   .on("/product/:id", ({ data }) => {
     renderProduct(data)
+  })
+  .on("/checkout", () => {
+    checkoutPage()
+  })
+  .on("/checkout/address", () => {
+    addressPage()
+  })
+  .on("/checkout/shipping", () => {
+    shippingPage()
   });
 router.resolve();
