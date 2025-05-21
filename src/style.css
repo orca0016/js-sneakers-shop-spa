@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 .inter-font {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -8,14 +9,121 @@
 
 @theme {
   --color-m-gray: #808080;
-  --color-dark-gray:#212529;
-  --color-badge-gray: #343A40;
-  --color-badge-gray-500: #ECECED;
-  --color-badge-counter:#F3F3F3 ; 
-  --color-white-input: #FAFAFA;
-  --color-gray-line: #EEEFEF;
+  --color-dark-gray: #212529;
+  --color-badge-gray: #343a40;
+  --color-badge-gray-500: #ececed;
+  --color-badge-counter: #f3f3f3;
+  --color-white-input: #fafafa;
+  --color-gray-line: #eeefef;
   --color-white-card: #ffffff;
-  --color-disable-btn: #6F7174;
-  --color-overlay:#52565F;
-  --color-gray-text-search:#9D9D9D;
+  --color-disable-btn: #6f7174;
+  --color-overlay: #52565f;
+  --color-placeholder-text: #6c757d;
+  --color-gray-text-search: #9d9d9d;
+  --color-heading-title: #152536;
+  --animate-wiggle: lgo-animation 0.5s ease-in-out;
+  @keyframes lgo-animation {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 100%;
+    }
+  }
+  --animate-fades: fadess 1s ease-in-out forwards;
+  @keyframes fadess {
+    0% {
+      transform: scale(2);
+      opacity: 0;
+    }
+    60%{
+      opacity: 100%;
+      
+    }
+    100% {
+      opacity: 100%;
+      transform: scale(1);
+    }
+  }
+}
+
+
+
+
+main .images-container .image-wrapper img{
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+    animation: forwards;
+}
+
+main .images-container .image-wrapper.loading{
+  position: relative;
+}
+
+main .images-container .image-wrapper.loading::after{
+  content: '';
+  position: absolute;
+  background: #fefefe;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  height: 100%;
+  width: 100%;
+}
+
+main .loader{
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.1s ease-in;
+    border: 2px solid #152536;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    margin: auto;
+    margin-top: 10px;
+    animation: loader 0.5s infinite alternate;
+}
+
+main .loader.show{
+    visibility: visible;
+    opacity: 1;
+}
+
+@keyframes loader {
+    from{
+        transform: scale(1);
+    }
+    to{
+        transform: scale(0.8);
+    }
+}
+
+/* slider show images of product */
+.swiper-pagination-bullet-active{
+  width: 2rem !important;
+  border-radius: 6px !important;
+  transition: 0.1s width !important;
+  background-color: #152536 !important ;
+}
+
+
+/* branding styles */
+.btn-brand {
+  @apply rounded-[25px] px-[20px] text-[16px] font-[600] border max-h-[10px] py-[15px] flex items-center cursor-pointer text-nowrap;
+}
+.btn-active {
+  @apply bg-[#343A40] text-white;
+}
+.btn-inactive {
+  @apply text-[#343A40];
+}
+.test{
+  max-width: fit-content !important;
 }
