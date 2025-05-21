@@ -1,5 +1,6 @@
-const card = (item ) => {
-  
+import { trashIcon } from "../../utils/icons";
+
+export const card = (item, isDialogOpen) => {
   return `<div data-id="${
     item.id
   }" class='flex gap-4 items-center bg-[#f9f9f9] p-4 rounded-3xl shadow-2xl'>
@@ -8,8 +9,13 @@ const card = (item ) => {
                 }' class='w-[100px] h-[100px] object-cover rounded-2xl' />
                 
                 <div class='flex flex-col flex-1 gap-2'>
-                  <div class='flex justify-start items-start'>
-                    <h1 class='font-semibold text-base line-clamp-1 '>${item.name}</h1>
+                  <div class='flex justify-between items-start'>
+                    <h1 class='font-semibold text-base line-clamp-1 '>${
+                      item.name
+                    }</h1>
+                    <button   data-id="${item.id}" class='remove-button-card ${
+    isDialogOpen ? "hidden" : null
+  }'>${trashIcon()}</button>
                   </div>
 
                   <div class='flex items-center text-sm text-gray-600 gap-4'>
@@ -25,16 +31,15 @@ const card = (item ) => {
                       item.price * item.productQuantity
                     }</h2>
                     <div class='flex items-center gap-3 bg-gray-200  px-3 py-1 rounded-full text-base'>
+                      <button data-id="${
+                        item.id
+                      }" class='minus-products' >-</button>
                       <span >${item.productQuantity}</span>
+                      <button  data-id="${
+                        item.id
+                      }" class='plus-products'>+</button>
                     </div>
                   </div>
                 </div>
               </div>`;
-};
-export const renderOrders = () => {
-  const allOrders = JSON.parse(localStorage.getItem("card-shop")) || [];
-  const ordersList = document.getElementById("orders-list");
-  allOrders.forEach((element) => {
-    ordersList.innerHTML += card(element);
-  });
 };

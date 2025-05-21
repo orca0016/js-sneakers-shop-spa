@@ -16,7 +16,7 @@ export const createFormAddProduct = (data) => {
   const sizeData = data.sizes.split("|");
   createSizeOption(sizeData);
 
-  //   add event to the quantity button
+  //add event to the quantity button
   quantityProduct(data);
 
   document

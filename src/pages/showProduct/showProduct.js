@@ -15,7 +15,6 @@ import { addFavorite } from "../../utils/likeHandeling";
 import { createFormAddProduct } from "./optionsAddToCard";
 import { getPRoduct } from "../../../apis/products";
 import { checkExpireToken } from "../../utils/errors";
-import { router } from "../../main";
 
 export  async function renderProduct (data){
     try {
@@ -100,8 +99,6 @@ export  async function renderProduct (data){
     optionCard.productSize = "41";
     optionCard.productQuantity = 1;
     history.back()
-    // const prevUrl = document.referrer.replace('http://localhost:5173' , "")
-    // router.navigate(prevUrl)
   };
 
   // slider handling

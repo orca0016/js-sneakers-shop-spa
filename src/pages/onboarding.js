@@ -134,29 +134,18 @@ export const onboarding = () => {
   textOverlayAnimation(".text-animation", "span", 0.5);
   let tl = gsap.timeline({ delay: 0.5 });
 
-  // اسلاید اول - ظاهر شدن با scale + fade
   tl.fromTo(
     "#onboard-1",
     { opacity: 0, scale: 0.95 },
     { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
   );
-
-  // اسلاید اول - محو شدن
   tl.to("#onboard-1", { opacity: 0, duration: 0.8, ease: "power1.in" });
   tl.set("#onboard-1", { display: "none" });
-
-  // اسلاید دوم - ظاهر شدن
   tl.set("#onboard-2", { display: "flex", opacity: 0 });
   tl.to("#onboard-2", { opacity: 1, duration: 1.2, ease: "power2.out" });
-
-  // اسلاید دوم - باقی بمونه ۳ ثانیه
   tl.to("#onboard-2", { duration: 3 }, "+=0.5");
-
-  // اسلاید دوم - محو
   tl.to("#onboard-2", { opacity: 0, duration: 0.8, ease: "power1.in" });
   tl.set("#onboard-2", { display: "none" });
-
-  // اسلاید سوم - ظاهر شدن با انیمیشن نرم
   tl.set("#onboard-3", { display: "block", opacity: 0, scale: 0.95 });
   tl.to("#onboard-3", {
     opacity: 1,

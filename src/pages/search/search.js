@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { optionIcon, searchIcon } from "../../utils/icons";
 import { footer } from "../home/footer";
-import { handleLengthHistory, renderRowHistory } from "../home/searchSection";
+import { handleLengthHistory } from "../home/searchSection";
 import { infiniteResultSearch } from "./resultsSearch";
 import { createInputSearch } from "./searchInput";
 

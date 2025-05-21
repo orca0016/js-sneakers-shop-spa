@@ -1,114 +1,14 @@
-import gsap from "gsap/all";
-import { logoIcon, nextIcon, searchIcon, trashIcon } from "../../utils/icons";
-import { showToast } from "../../utils/toasts/toast";
+import { logoIcon, nextIcon, searchIcon } from "../../utils/icons";
 import { footer } from "../home/footer";
+import {
+  decreaseCardItem,
+  increaseCardItem,
+  removeCard,
+  totalPrice,
+} from "./oparationsCard";
+import { card } from "./singleCardProduct";
 
-const closeAnimationDialog = (dialogWrapper) => {
-  let timelineAnimation = gsap.timeline({
-    onComplete: () => {
-      dialogWrapper.classList.add("hidden");
-      dialogWrapper.classList.remove("flex");
-      document.getElementById("body").style.overflow = "auto";
-    },
-  });
-  timelineAnimation
-    .to(".content-dialog-card", { duration: 0, y: 0 })
-    .to(".content-dialog-card", { duration: 0.3, y: 600, ease: "power2.in" })
-    .to("#dialog-wrapper", { duration: 0, opacity: 0 });
-};
-const totalPrice = () => {
-  const totalItem = JSON.parse(localStorage.getItem("card-shop")) || [];
-  let totalPrices = 0;
-  totalItem.forEach((item) => {
-    totalPrices += item.price * item.productQuantity;
-  });
-  const contTotalPrice = document.getElementById("total-price-checkout-card");
-  contTotalPrice.innerText = `$${totalPrices}`;
-};
-const card = (item, isDialogOpen) => {
-  return `<div data-id="${
-    item.id
-  }" class='flex gap-4 items-center bg-[#f9f9f9] p-4 rounded-3xl shadow-2xl'>
-                <img src='${
-                  item.imageURL
-                }' class='w-[100px] h-[100px] object-cover rounded-2xl' />
-                
-                <div class='flex flex-col flex-1 gap-2'>
-                  <div class='flex justify-between items-start'>
-                    <h1 class='font-semibold text-base line-clamp-1 '>${
-                      item.name
-                    }</h1>
-                    <button   data-id="${item.id}" class='remove-button-card ${
-    isDialogOpen ? "hidden" : null
-  }'>${trashIcon()}</button>
-                  </div>
-
-                  <div class='flex items-center text-sm text-gray-600 gap-4'>
-                    <div class='w-4 h-4 rounded-full' style="background-color:${
-                      item.productColor
-                    };"></div>
-                    <span class='border-r pr-2'>${item.productColor}</span>
-                    <span>Size: ${item.productSize}</span>
-                  </div>
-
-                  <div class='flex justify-between items-center'>
-                    <h2 class='font-semibold text-lg'>$${
-                      item.price * item.productQuantity
-                    }</h2>
-                    <div class='flex items-center gap-3 bg-gray-200  px-3 py-1 rounded-full text-base'>
-                      <button data-id="${
-                        item.id
-                      }" class='minus-products' >-</button>
-                      <span >${item.productQuantity}</span>
-                      <button  data-id="${
-                        item.id
-                      }" class='plus-products'>+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>`;
-};
-const removeHandling = (product) => {
-  const dialogWrapper = document.getElementById("dialog-wrapper");
-  const dialogContent = dialogWrapper.querySelector(".content-dialog-card");
-  const closeDialogCard = document.getElementById("close-dialog-card");
-  const contentDialogCards = document.getElementById("content-dialog-cards");
-  const removeDialogCard = document.getElementById("remove-dialog-card");
-  contentDialogCards.innerHTML = card(product, true);
-
-  let timelineAnimation = gsap.timeline({
-    onStart: () => {
-      dialogWrapper.classList.remove("hidden");
-      dialogWrapper.classList.add("flex");
-      document.getElementById("body").style.overflow = "auto";
-    },
-  });
-  timelineAnimation
-    .to("#dialog-wrapper", { duration: 0, opacity: 100 })
-    .to(".content-dialog-card", { duration: 0, y: 600 })
-    .to(".content-dialog-card", { duration: 0.5, y: 0, ease: "power2.out" });
-
-  dialogWrapper.addEventListener("click", () => {
-    closeAnimationDialog(dialogWrapper);
-  });
-  closeDialogCard.addEventListener("click", () => {
-    closeAnimationDialog(dialogWrapper);
-  });
-  removeDialogCard.addEventListener("click", () => {
-    let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
-    if (cardData.find((item) => item.id === product.id)) {
-      showToast("Product successfully removed from cart. ", "success");
-    }
-    cardData = cardData.filter((el) => el.id !== product.id);
-    localStorage.setItem("card-shop", JSON.stringify(cardData));
-    renderCard();
-    closeAnimationDialog(dialogWrapper);
-  });
-  dialogContent.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-};
-const renderCard = () => {
+export const renderCard = () => {
   const cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
   const cardsContainer = document.getElementById("cards-container");
 
@@ -116,63 +16,22 @@ const renderCard = () => {
   cardData.forEach((element) => {
     cardsContainer.innerHTML += card(element);
   });
+  if (cardData.length===0) {
+    cardsContainer.innerHTML = `
+    <div class='flex justify-center pt-10 col-span-2 text-center  flex-col items-center'>
+        <img src='../../../public/images/not-found.png'/>
+        <h2 class='font-bold text-3xl'>Not Found Any Product </h2>
+        <p class='text-[#676767]'>
+       There are no products in your shopping cart. Please add a product to your cart.
+        </p>
+    </div>
+    `
+  }
   removeCard();
   increaseCardItem();
   decreaseCardItem();
 };
-const removeCard = () => {
-  let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
-  const removeButtonCard =
-    document.getElementsByClassName("remove-button-card");
-  for (let item of removeButtonCard) {
-    item.addEventListener("click", () => {
-      cardData.forEach((el, index) => {
-        if (el.id === Number(item.getAttribute("data-id"))) {
-          removeHandling(cardData[index]);
-        }
-      });
-    });
-  }
-  totalPrice();
-};
-const increaseCardItem = () => {
-  let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
-  const minusProducts = document.getElementsByClassName("plus-products");
-  for (let element of minusProducts) {
-    element.addEventListener("click", () => {
-      const btnId = element.getAttribute("data-id");
-      cardData.forEach((item, index) => {
-        if (item.id === +btnId) {
-          if (item.productQuantity < 10) {
-            cardData[index].productQuantity++;
-            localStorage.setItem("card-shop", JSON.stringify(cardData));
-            renderCard();
-          }
-        }
-      });
-    });
-  }
-  totalPrice();
-};
-const decreaseCardItem = () => {
-  let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
-  const minusProducts = document.getElementsByClassName("minus-products");
-  for (let element of minusProducts) {
-    element.addEventListener("click", () => {
-      const btnId = element.getAttribute("data-id");
-      cardData.forEach((item, index) => {
-        if (item.id === +btnId) {
-          if (item.productQuantity > 1) {
-            cardData[index].productQuantity--;
-            localStorage.setItem("card-shop", JSON.stringify(cardData));
-            renderCard();
-          }
-        }
-      });
-    });
-  }
-  totalPrice();
-};
+
 export const cardPage = () => {
   const htmlElement = `
     <div class='bg-white min-h-[100vh] px-6 py-10'>

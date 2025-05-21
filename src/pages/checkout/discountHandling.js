@@ -1,12 +1,12 @@
 import { allDiscount } from "../../libs/globalState";
 import { plusIcon } from "../../utils/icons";
 import { showToast } from "../../utils/toasts/toast";
+import { newTotalPrice } from "./newTotalPrice";
 import {
   handleShowDiscounts,
   handleShowPromoCost,
   handlingShowTotalPrice,
-  newTotalPrice,
-} from "./checkoutPage";
+} from "./showDiscountsItmes";
 
 const inputDiscount = (inputElement) => {
   inputElement.className =
@@ -26,11 +26,11 @@ export const calculatePresentDiscount = () => {
     0
   );
   const totalDiscountAmount = (totalPrices * currentTotalPercent) / 100;
-  newTotalPrice('discountPrice',totalDiscountAmount);
+  newTotalPrice("discountPrice", totalDiscountAmount);
 };
 const createButtonPromoCode = (button, inputElement) => {
   button.className =
-    "rounded-full w-16 h-16 flex items-center justify-center bg-black text-white col-span-2";
+    "rounded-full w-16 h-16 flex items-center justify-center bg-black text-white  col-span-2";
 
   button.addEventListener("click", () => {
     const inputValue = inputElement.value.trim();

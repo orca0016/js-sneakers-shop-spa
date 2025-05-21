@@ -1,7 +1,8 @@
 import { getAllPRoducts } from "../../../apis/products";
 import { router } from "../../main";
 import { checkExpireToken } from "../../utils/errors";
-import { heartIcon, starIcon } from "../../utils/icons";
+import { starIcon } from "../../utils/icons";
+import { notFoundProduct } from "./notFoundSection";
 import { updateNumberResults } from "./search";
 import { searchAddFavorite } from "./searchAddFavorite";
 
@@ -45,18 +46,8 @@ const updateCardProducts = (product) => {
   });
   searchAddFavorite(product , 'search-btn-like')
 };
-const notFoundProduct = () => {
-  const notFound = `
-    <div class='flex justify-center pt-10 col-span-2 text-center  flex-col items-center'>
-        <img src='../../../public/images/not-found.png'/>
-        <h2 class='font-bold text-3xl'>Not Found </h2>
-        <p class='text-[#676767]'>
-        Sorry. the keyword you  entered  cannot be found . Please check again or search  with another keyword .
-        </p>
-    </div>
-    `;
-  document.getElementById(`results-search`).innerHTML = notFound;
-};
+
+
 const fetchProducts = async (searchWord) => {
   let currentPage = 1;
   const loader = document.getElementById("loader");
@@ -64,7 +55,6 @@ const fetchProducts = async (searchWord) => {
     loader.classList.add("show");
     isFetching = true;
 
-    // console.log(state.brandSort);
     const products = await getAllPRoducts(
       `?page=${currentPage}&limit=10&search=${searchWord}`
     );
@@ -84,6 +74,7 @@ const fetchProducts = async (searchWord) => {
     checkExpireToken(error.response?.request?.status);
   }
 };
+
 /**
  * Loads product list with infinite scroll.
  * @param {boolean} isRerender - If true, resets the list before loading new items.

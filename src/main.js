@@ -7,13 +7,13 @@ import { checkoutPage } from "./pages/checkout/checkoutPage";
 import { paymentPage } from "./pages/checkout/payment/paymentPage";
 import { shippingPage } from "./pages/checkout/shipping/shippinPage";
 import { homePage } from "./pages/home/home-page";
-import { loginPage } from "./pages/login-page";
+import { loginPage } from "./pages/login/login-page";
 import { onboarding } from "./pages/onboarding";
 import { searchPage } from "./pages/search/search";
 import { renderProduct } from "./pages/showProduct/showProduct";
-import { signupPage } from "./pages/signup-page";
 import "./style.css";
 import { showToast } from "./utils/toasts/toast";
+import { signupPage } from "./pages/signup/signup-page";
 
 export const router = new Navigo("/");
 // guard
