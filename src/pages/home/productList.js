@@ -3,6 +3,8 @@ import { router } from "../../main";
 import { checkExpireToken } from "../../utils/errors";
 import { state } from "./brandFilter";
 
+let scrollHandler = null;
+
 const updateCardProducts = (product) => {
   product.forEach((item) => {
     const productContainer = document.createElement("div");
@@ -10,7 +12,6 @@ const updateCardProducts = (product) => {
     productContainer.classList.add("loading");
     const divWrapper = document.createElement("div");
     divWrapper.addEventListener("click", () => {
-      // showProduct(item);
       router.navigate(`/product/${item.id}`);
     });
     const divContent = `
@@ -24,60 +25,49 @@ const updateCardProducts = (product) => {
       <h2 class="text-[18px] font-[600] mb-[8px] line-clamp-1">${item.name}</h2>
       <p class='text-[16px] font-[600]'>$${item.price}</p>
       </div>
-        `;
+    `;
     divWrapper.innerHTML = divContent;
     productContainer.appendChild(divWrapper);
-
-    document.getElementById(`product-container`)?.appendChild(productContainer);
-
+    document.getElementById("product-container")?.appendChild(productContainer);
     setTimeout(() => {
       productContainer.classList.remove("loading");
     }, 500);
   });
 };
 
-/**
- * Loads product list with infinite scroll.
- * @param {boolean} isRerender - If true, resets the list before loading new items.
- */
 export function infiniteCardHandling(isRerender) {
-  if (isRerender) document.getElementById(`product-container`).innerHTML = "";
-
+  if (isRerender) document.getElementById("product-container").innerHTML = "";
   let isFetching = false;
   let currentPage = 1;
-  let lengthData;
   const loader = document.getElementById("loader");
 
   const fetchProducts = async () => {
     try {
       loader.classList.add("show");
       isFetching = true;
-
-      // console.log(state.brandSort);
       const products = await getAllPRoducts(
         `?page=${currentPage}&limit=10${
           state.brandSort !== "All" ? `&brands=${state.brandSort}` : ""
         }`
       );
-      // console.log(products);
-
-      lengthData = products.data.length;
       updateCardProducts(products.data);
       currentPage++;
       isFetching = false;
       loader.classList.remove("show");
     } catch (error) {
       console.log(error);
-      checkExpireToken(error.response.request.status);
+      checkExpireToken(error.response?.request?.status);
     }
   };
+
   fetchProducts();
 
-  window.addEventListener("scroll", async () => {
-    // Do not run if currently fetching
-    if (isFetching) return;
+  if (scrollHandler) {
+    window.removeEventListener("scroll", scrollHandler);
+  }
 
-    // Scrolled to bottom
+  scrollHandler = async () => {
+    if (isFetching) return;
     if (
       window.innerHeight + window.scrollY >=
       document.body.offsetHeight - 10
@@ -86,7 +76,10 @@ export function infiniteCardHandling(isRerender) {
         await fetchProducts();
       }
     }
-  });
+  };
+
+  window.addEventListener("scroll", scrollHandler);
+
   const el = document.getElementById("username-header");
   window.scrollTo(0, el.offsetTop);
 }

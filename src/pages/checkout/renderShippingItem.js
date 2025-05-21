@@ -34,11 +34,10 @@ export const renderCurrentAddress = () => {
   currentCard.innerHTML = htmlElement;
 };
 export const renderCurrentShipping = () => {
-  const dataShipping = JSON.parse(localStorage.getItem("Shipping-method"));
-  const selectedShippingMethod = dataShipping?.find((item) => item.selected);
+  const selectedShippingMethod = JSON.parse(localStorage.getItem("Shipping-method"));
   let htmlElement;
 
-  if (!dataShipping) {
+  if (!selectedShippingMethod) {
     htmlElement = ` 
         <div id='select-address' class='rounded-3xl shadow-2xl p-6 grid grid-cols-6 items-center gap-4 my-6' >
                     <div class='col-span-1'>

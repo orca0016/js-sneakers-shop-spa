@@ -46,7 +46,7 @@ const shippingCost = () => {
   const exactShipping = JSON.parse(localStorage.getItem("Shipping-method")) || [
     { price: "-", selected: true },
   ];
-  const price = exactShipping.find((item) => item.selected).price;
+  const price = exactShipping.price;
   const shippingConstDiv = document.getElementById("shipping-const");
   shippingConstDiv.innerText = `${price !== "-" ? "$" : ""}${price}`;
   if (price !== "-") {
