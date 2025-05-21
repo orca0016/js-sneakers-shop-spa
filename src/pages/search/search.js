@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { searchIcon } from "../../utils/icons";
+import { optionIcon, searchIcon } from "../../utils/icons";
 import { footer } from "../home/footer";
 import { handleLengthHistory, renderRowHistory } from "../home/searchSection";
 import { infiniteResultSearch } from "./resultsSearch";
@@ -30,6 +30,7 @@ export const searchPage = () => {
   const htmlElement = `
 <div class='bg-white px-[24px] py-10  pt-6 min-h-[100vh] overflow-y-auto' >
     <form autocomplete='off' id='container-search-page' class='py-[24px] relative'>
+    <button class='absolute right-3 top-10'>${optionIcon()}</button>
     <button type="submit" id='search-again' class='absolute left-4 inset-y-5 cursor-pointer'>${searchIcon()}</button>
     </form>
     <div class='flex justify-between'>

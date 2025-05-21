@@ -1,6 +1,7 @@
 import { getUserInfo } from "../../../apis/user";
+import { router } from "../../main";
 import { checkExpireToken } from "../../utils/errors";
-import { bellIcon, heartHeaderIcon } from "../../utils/icons";
+import { bellIcon, heartHeaderIcon, logOutIcon } from "../../utils/icons";
 
 // Display a specific time of day based on the system clock.
 const showMessageTime = () => {
@@ -30,6 +31,13 @@ export const showUserInformation = async () => {
   }
   return infoData;
 };
+export const handleLogOutBtn =()=>{
+  const logOutBtn = document.getElementById('log-out-btn')
+  logOutBtn.addEventListener('click' , ()=>{
+    localStorage.removeItem('app-token')
+    router.navigate('/login')
+  })
+}
 export const header = () => {
   const headerElement = `
         <header class='px-[24px] py-[16px] flex justify-between items-center '>
@@ -43,6 +51,10 @@ export const header = () => {
             </span>
             <span class='cursor-pointer'>
             ${heartHeaderIcon()}
+            </span>
+            
+            <span id='log-out-btn' class='cursor-pointer'>
+            ${logOutIcon()}
             </span>
             </div>
         </header>

@@ -1,5 +1,7 @@
+import { router } from "../../main";
 import {
   backIcon,
+  closeIcon,
   mapIcon,
   moreIcon,
   nextArrowIcon,
@@ -8,7 +10,9 @@ import {
   plusIcon,
   truckIcon,
 } from "../../utils/icons";
+import { addNewDiscount, calculatePresentDiscount } from "./discountHandling";
 import { renderOrders } from "./renderOrders";
+
 const renderCurrentAddress = () => {
   const currentCard = document.getElementById("current-card-address");
   const addresses = JSON.parse(localStorage.getItem("address-Shipping")) || [
@@ -47,7 +51,7 @@ const renderCurrentShipping = () => {
   const selectedShippingMethod = dataShipping?.find((item) => item.selected);
   let htmlElement;
   console.log(dataShipping);
-  
+
   if (!dataShipping) {
     htmlElement = ` 
         <div id='select-address' class='rounded-3xl shadow-2xl p-6 grid grid-cols-6 items-center gap-4 my-6' >
@@ -64,7 +68,7 @@ const renderCurrentShipping = () => {
 `;
   } else {
     htmlElement = `<div  class='rounded-3xl shadow-2xl p-6 grid grid-cols-6 items-center gap-4 my-6' >
-                <div class='rounded-full flex items-center justify-center w-10 h-10  bg-black text-white col-span-1'  style='box-shadow:0px 0px 0 8px #DFDFDF;'>
+                <div class='rounded-full flex items-center justify-center w-12 h-12  bg-[#161617] text-white col-span-1'>
                     ${selectedShippingMethod.icon}
                 </div>
                 <div class='flex flex-col gap-1 col-span-4'>
@@ -82,6 +86,102 @@ const renderCurrentShipping = () => {
             </div>`;
   }
   document.getElementById("card-shipping-method").innerHTML = htmlElement;
+};
+const goToPayment = () => {
+  const goToPaymentBtn = document.getElementById("go-to-payment");
+  if (
+    localStorage.getItem("Shipping-method") &&
+    localStorage.getItem("address-Shipping")
+  ) {
+    goToPaymentBtn.removeAttribute("disabled");
+  } else {
+    goToPaymentBtn.setAttribute("disabled", "true");
+  }
+  goToPaymentBtn.addEventListener("click", () => {
+    router.navigate("/checkout/payment");
+  });
+};
+export const newTotalPrice = (name, newCost) => {
+  let prevPrices = JSON.parse(localStorage.getItem("total-prices")) || {};
+  prevPrices = {
+    ...prevPrices,
+    [name]: newCost,
+  };
+
+  localStorage.setItem("total-prices", JSON.stringify(prevPrices));
+};
+const renderTotalPrice = () => {
+  const totalDiv = document.getElementById("total-amount");
+  const totalPrices = JSON.parse(localStorage.getItem("card-shop"));
+  let tempPrice = 0;
+  totalPrices?.forEach((el) => {
+    tempPrice += el.price * el.productQuantity;
+  });
+  totalDiv.innerText = `$${tempPrice}`;
+  newTotalPrice("totalPrices", tempPrice);
+};
+const shippingCost = () => {
+  const exactShipping = JSON.parse(localStorage.getItem("Shipping-method")) || [
+    { price: "-", selected: true },
+  ];
+  const price = exactShipping.find((item) => item.selected).price;
+  const shippingConstDiv = document.getElementById("shipping-const");
+  shippingConstDiv.innerText = `${price !== "-" ? "$" : ""}${price}`;
+  if (price !== "-") {
+    newTotalPrice("shippingCont", price);
+  }
+};
+
+export const handleShowPromoCost = () => {
+  const contRowDiscount = document.getElementById("show-discount");
+  const isDiscountExist =
+    JSON.parse(localStorage.getItem("total-prices")).discountPrice || null;
+  const discountConst = document.getElementById("discount-const");
+  if (isDiscountExist) {
+    discountConst.innerText = `-$${isDiscountExist}`;
+    contRowDiscount.classList.add("flex");
+    contRowDiscount.classList.remove("hidden");
+  }else{
+    contRowDiscount.classList.remove("flex");
+    contRowDiscount.classList.add("hidden");
+  }
+};
+export const handlingShowTotalPrice = () => {
+  const totalPriceElement = document.getElementById("total-price-element");
+  const totalPrice = JSON.parse(localStorage.getItem("total-prices"));
+  let finalPrice = totalPrice.totalPrices;
+
+  if (totalPrice.discountPrice) finalPrice -= totalPrice.discountPrice;
+  if (totalPrice.shippingCont) finalPrice += totalPrice.shippingCont;
+
+  totalPriceElement.innerText = `$${finalPrice}`;
+};
+export const handleShowDiscounts = () => {
+  const showDiscounts = document.getElementById("show-discounts");
+  showDiscounts.innerHTML = "";
+  const allDiscounts = JSON.parse(localStorage.getItem("discount")) || [];
+
+  allDiscounts.forEach((item) => {
+    showDiscounts.innerHTML += `
+    <div class='bg-black px-5 py-3 rounded-full text-white flex gap-2 min-w-fit'>
+      ${item.description}
+      <button data-id='${item.id}' class='delete-discount-btn'>
+      ${closeIcon()}
+      </button>
+    </div>
+    `;
+  });
+  const allCloseBtn = document.getElementsByClassName("delete-discount-btn");
+  for (const element of allCloseBtn) {
+    element.addEventListener("click", () => {
+      const btnId = Number(element.getAttribute("data-id"));
+      localStorage.setItem('discount' , JSON.stringify(allDiscounts.filter(item=>item.id!==btnId)))
+      calculatePresentDiscount() 
+      handleShowDiscounts()
+      handleShowPromoCost()
+      handlingShowTotalPrice()
+    });
+  }
 };
 export const checkoutPage = () => {
   const htmlElement = `
@@ -112,29 +212,32 @@ export const checkoutPage = () => {
 
        <div class='px-6 py-10'>
             <h1 class='text-2xl py-4 font-[700]'>Promo Code</h1>
-            <div class='grid grid-cols-9 gap-4 items-center'>
-                <input type="text" name="promoCode" placeholder='Enter your  Promo Code' class='col-span-7 bg-[#FAFAFB] rounded-2xl outline-gray-500 placeholder:text-placeholder-text px-4 py-5'>
-                <button class=' rounded-full w-16 h-16 flex items-center justify-center bg-black text-white col-span-2'>
-                    ${plusIcon()}
-                </button>
-            </div>
+            
+            <div id='container-discount' class='grid grid-cols-9 gap-4 items-center'></div>
+            
+            <div id='show-discounts' class='overflow-x-auto flex gap-3 my-4'></div>
+
             <div class='shadow-2xl rounded-4xl p-6 mt-6'>
                 <div class='flex justify-between items-center pb-6'>
                     <h3 class='text-gray-500'>Amount</h3>
-                    <p class='text-xl'>$432</p>
+                    <p class='text-xl' id='total-amount'>$432</p>
                 </div>
                 <div class='flex justify-between items-center pb-6'>
                     <h3 class='text-gray-500'>Shipping</h3>
-                    <p class='text-xl'>-</p>
+                    <p class='text-xl' id='shipping-const'>-</p>
+                </div>
+                <div id='show-discount' class='hidden justify-between items-center pb-6'>
+                    <h3 class='text-gray-500'>Promo</h3>
+                    <p class='text-xl' id='discount-const'>-</p>
                 </div>
                 <div class='flex justify-between items-center border-t border-[#EFEFEF] pt-6'>
                     <h3 class='text-gray-500'>Total</h3>
-                    <p class='text-xl'>-</p>
+                    <p class='text-xl' id='total-price-element'>-</p>
                 </div>
             </div>
         </div>
         <div class='rounded-t-3xl bg-white   border-[#EFEFEF] border-t p-6'>
-            <button class='flex items-center justify-center gap-4 py-5 rounded-full bg-black text-white w-full'>Continue to Payment ${nextIcon()}</button>
+            <button disabled id='go-to-payment' class='disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center gap-4 py-5 rounded-full bg-black text-white w-full'>Continue to Payment ${nextIcon()}</button>
         </div>
 
     </div>
@@ -143,4 +246,12 @@ export const checkoutPage = () => {
   renderOrders();
   renderCurrentAddress();
   renderCurrentShipping();
+  goToPayment();
+  renderTotalPrice();
+  shippingCost();
+  addNewDiscount();
+  calculatePresentDiscount()
+  handleShowPromoCost();
+  handlingShowTotalPrice();
+  handleShowDiscounts();
 };

@@ -20,7 +20,7 @@ const updateIconColor = (iconDiv, iconFn, value) => {
 const createInputField = (type, name, placeholder, iconFn) => {
   const wrapper = document.createElement("div");
   wrapper.className = "relative min-w-full";
-
+  
   const input = document.createElement("input");
   input.type = type;
   input.name = name;
@@ -32,29 +32,36 @@ const createInputField = (type, name, placeholder, iconFn) => {
   iconDiv.className =
     "absolute left-[12px] top-[10px] bottom-[10px] text-placeholder-text";
   iconDiv.innerHTML = iconFn("#6C757D");
-  const showToastDebounced = debounce(() => {
-    if (name === "username") {
-      showToast("Username must be longer than 5", "danger");
-    } else {
-      showToast(
-        "Min 8 character with  at insert  one capital letter  , a number and special character  .",
-        "danger"
-      );
-    }
-  }, 600);
-  input.addEventListener("input", (e) => {
-    updateIconColor(iconDiv, iconFn, e.target.value);
-    showToastDebounced();
-  });
 
   wrapper.appendChild(input);
-  wrapper.appendChild(iconDiv);
+//message wrapper
+  const messageInput = document.createElement("p");
+  messageInput.className='text-red-400 text-sm mt-3 opacity-0'
+  messageInput.id=`message-login-${name}`
+  messageInput.innerText =
+    name === "username"
+      ? "Username must be longer than 5"
+      : "Min 8 character with  at insert  one capital letter  , a number and special character  .";
+      wrapper.appendChild(messageInput);
 
+  
+  input.addEventListener("input", (e) => {
+    updateIconColor(iconDiv, iconFn, e.target.value);
+    if (name==='username' && input.value.length<5) {
+      messageInput.classList.add('opacity-[100%]')    
+    }else if(name==='password'&& !isPasswordValid(input.value)){
+      messageInput.classList.add('opacity-[100%]')   
+    }else{
+      messageInput.classList.remove('opacity-[100%]')   
+    }
+  });
+
+      wrapper.appendChild(iconDiv);
   if (type === "password") {
     const toggleBtn = document.createElement("button");
     toggleBtn.type = "button";
     toggleBtn.className =
-      "absolute right-[12px] top-[10px] text-[4rem] bottom-[10px]";
+      "absolute right-[12px] top-[10px] text-[4rem] ";
     toggleBtn.innerHTML = eyesCloseIcon();
 
     toggleBtn.addEventListener("click", () => {
@@ -121,7 +128,7 @@ export const customForm = () => {
   submitBtn.type = "submit";
   submitBtn.innerText = "Signup";
   submitBtn.className =
-    "w-full bg-dark-gray rounded-3xl h-[47px] text-white text-[14px] mt-[288px] cursor-pointer disabled:bg-disable-btn";
+    "w-full bg-dark-gray rounded-3xl h-[47px] text-white text-[14px] mt-[200px] cursor-pointer disabled:bg-disable-btn";
   submitBtn.setAttribute("disabled", "true");
 
   const validateForm = () => {

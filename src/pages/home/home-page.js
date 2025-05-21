@@ -1,6 +1,6 @@
 import { fetchBrands } from "./brandFilter";
 import { footer } from "./footer";
-import { header, showUserInformation } from "./heaer";
+import { handleLogOutBtn, header, showUserInformation } from "./heaer";
 import { infiniteCardHandling } from "./productList";
 import { searchSection } from "./searchSection";
 
@@ -36,4 +36,5 @@ export const homePage = async () => {
   searchSection();
   await fetchBrands();
   infiniteCardHandling();
+  handleLogOutBtn()
 };

@@ -1,6 +1,21 @@
+import gsap from "gsap/all";
 import { logoIcon, nextIcon, searchIcon, trashIcon } from "../../utils/icons";
+import { showToast } from "../../utils/toasts/toast";
 import { footer } from "../home/footer";
 
+const closeAnimationDialog = (dialogWrapper) => {
+  let timelineAnimation = gsap.timeline({
+    onComplete: () => {
+      dialogWrapper.classList.add("hidden");
+      dialogWrapper.classList.remove("flex");
+      document.getElementById("body").style.overflow = "auto";
+    },
+  });
+  timelineAnimation
+    .to(".content-dialog-card", { duration: 0, y: 0 })
+    .to(".content-dialog-card", { duration: 0.3, y: 600, ease: "power2.in" })
+    .to("#dialog-wrapper", { duration: 0, opacity: 0 });
+};
 const totalPrice = () => {
   const totalItem = JSON.parse(localStorage.getItem("card-shop")) || [];
   let totalPrices = 0;
@@ -10,8 +25,7 @@ const totalPrice = () => {
   const contTotalPrice = document.getElementById("total-price-checkout-card");
   contTotalPrice.innerText = `$${totalPrices}`;
 };
-const card = (item  , isDialogOpen) => {
-  
+const card = (item, isDialogOpen) => {
   return `<div data-id="${
     item.id
   }" class='flex gap-4 items-center bg-[#f9f9f9] p-4 rounded-3xl shadow-2xl'>
@@ -21,10 +35,12 @@ const card = (item  , isDialogOpen) => {
                 
                 <div class='flex flex-col flex-1 gap-2'>
                   <div class='flex justify-between items-start'>
-                    <h1 class='font-semibold text-base line-clamp-1 '>${item.name}</h1>
-                    <button   data-id="${
-                      item.id
-                    }" class='remove-button-card ${isDialogOpen? 'hidden':null}'>${trashIcon()}</button>
+                    <h1 class='font-semibold text-base line-clamp-1 '>${
+                      item.name
+                    }</h1>
+                    <button   data-id="${item.id}" class='remove-button-card ${
+    isDialogOpen ? "hidden" : null
+  }'>${trashIcon()}</button>
                   </div>
 
                   <div class='flex items-center text-sm text-gray-600 gap-4'>
@@ -58,38 +74,47 @@ const removeHandling = (product) => {
   const closeDialogCard = document.getElementById("close-dialog-card");
   const contentDialogCards = document.getElementById("content-dialog-cards");
   const removeDialogCard = document.getElementById("remove-dialog-card");
-  contentDialogCards.innerHTML = card(product , true);
-  dialogWrapper.classList.remove("hidden");
-  dialogWrapper.classList.add("flex");
+  contentDialogCards.innerHTML = card(product, true);
+
+  let timelineAnimation = gsap.timeline({
+    onStart: () => {
+      dialogWrapper.classList.remove("hidden");
+      dialogWrapper.classList.add("flex");
+      document.getElementById("body").style.overflow = "auto";
+    },
+  });
+  timelineAnimation
+    .to("#dialog-wrapper", { duration: 0, opacity: 100 })
+    .to(".content-dialog-card", { duration: 0, y: 600 })
+    .to(".content-dialog-card", { duration: 0.5, y: 0, ease: "power2.out" });
 
   dialogWrapper.addEventListener("click", () => {
-    dialogWrapper.classList.add("hidden");
-    dialogWrapper.classList.remove("flex");
+    closeAnimationDialog(dialogWrapper);
   });
   closeDialogCard.addEventListener("click", () => {
-    dialogWrapper.classList.add("hidden");
-    dialogWrapper.classList.remove("flex");
+    closeAnimationDialog(dialogWrapper);
   });
   removeDialogCard.addEventListener("click", () => {
     let cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
+    if (cardData.find((item) => item.id === product.id)) {
+      showToast("Product successfully removed from cart. ", "success");
+    }
     cardData = cardData.filter((el) => el.id !== product.id);
     localStorage.setItem("card-shop", JSON.stringify(cardData));
     renderCard();
-    dialogWrapper.classList.add("hidden");
-    dialogWrapper.classList.remove("flex");
+    closeAnimationDialog(dialogWrapper);
   });
   dialogContent.addEventListener("click", (e) => {
     e.stopPropagation();
   });
 };
-
 const renderCard = () => {
   const cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
   const cardsContainer = document.getElementById("cards-container");
 
   cardsContainer.innerHTML = "";
   cardData.forEach((element) => {
-    cardsContainer.innerHTML += card(element  );
+    cardsContainer.innerHTML += card(element);
   });
   removeCard();
   increaseCardItem();

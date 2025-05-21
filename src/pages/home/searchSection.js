@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { router } from "../../main";
-import { closeIcon, searchIcon } from "../../utils/icons";
+import { closeIcon, optionIcon, searchIcon } from "../../utils/icons";
 
 let reSearch = JSON.parse(localStorage.getItem("history-search")) || [];
 export const handleLengthHistory = () => {
@@ -85,6 +85,10 @@ export const searchSection = () => {
   form.appendChild(createSubmitSearch());
   form.appendChild(divHistoryResults);
   searchContainer.appendChild(form);
+  const option = document.createElement('div')
+  option.innerHTML=optionIcon()
+  option.className = 'absolute right-3 top-2'
+  form.appendChild(option)
   renderRowHistory();
 };
 export const renderRowHistory = () => {
@@ -108,7 +112,7 @@ export const renderRowHistory = () => {
           name: item.textContent,
           id: uuidv4(),
         };
-        const history = JSON.parse(localStorage.getItem("history-search"));
+        const history = JSON.parse(localStorage.getItem("history-search"))||[];
         localStorage.setItem(
           "history-search",
           JSON.stringify([...history, newHistory])
@@ -121,15 +125,15 @@ export const renderRowHistory = () => {
   });
 
   const removeBtns = document.getElementsByClassName("remove-history-btns");
-  for (let item of removeBtns) {
-    item.addEventListener("click", () => {
-      reSearch = reSearch.filter(
-        (element) => element.id !== item.getAttribute("listId")
-      );
-      localStorage.setItem("history-search", JSON.stringify(reSearch));
-      wrapperList.innerHTML = "";
-      document.getElementById("body").style.overflow = "auto";
-      renderRowHistory();
-    });
-  }
+for (let item of removeBtns) {
+  item.addEventListener("click", () => {
+    const currentHistory = JSON.parse(localStorage.getItem("history-search")) || [];
+    const updated = currentHistory.filter(
+      (element) => element.id !== item.getAttribute("listId")
+    );
+    localStorage.setItem("history-search", JSON.stringify(updated));
+    renderRowHistory();
+  });
+}
+
 };
