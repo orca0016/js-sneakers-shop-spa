@@ -3,6 +3,7 @@ import { infiniteResultSearch } from "./resultsSearch";
 
 const showToastDebounced = debounce((value) => {
   infiniteResultSearch(true, value);
+  document.getElementById('result-search').innerText=value
 }, 1000);
 export const createInputSearch = (defaultValue) => {
   //   input of search section
@@ -17,6 +18,7 @@ export const createInputSearch = (defaultValue) => {
   input.placeholder = "Search";
   input.addEventListener("input", (e) => {
     showToastDebounced(e.target.value);
+    
   });
   return input;
 };

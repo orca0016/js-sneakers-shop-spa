@@ -14,6 +14,7 @@ import { renderProduct } from "./pages/showProduct/showProduct";
 import "./style.css";
 import { showToast } from "./utils/toasts/toast";
 import { signupPage } from "./pages/signup/signup-page";
+import { favoritePage } from "./pages/favorites/favorite-page";
 
 export const router = new Navigo("/");
 // guard
@@ -60,5 +61,8 @@ router
   })
   .on("/checkout/payment", () => {
     paymentPage();
+  })
+  .on("/favorites", () => {
+    favoritePage();
   });
 router.resolve();

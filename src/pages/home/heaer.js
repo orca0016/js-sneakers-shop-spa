@@ -49,9 +49,9 @@ export const header = () => {
             <span class='cursor-pointer'>
             ${bellIcon()}
             </span>
-            <span class='cursor-pointer'>
+            <a data-navigo href='/favorites' class='cursor-pointer'>
             ${heartHeaderIcon()}
-            </span>
+            </a>
             
             <span id='log-out-btn' class='cursor-pointer'>
             ${logOutIcon()}
