@@ -5,7 +5,7 @@ const addEventForModalButtons = ()=>{
   const confirmBtn = document.getElementById('back-to-home-modal-payment')
   confirmBtn.addEventListener('click' , ()=>{
     localStorage.removeItem('card-shop')
-    localStorage.removeItem('address-Shipping')
+    localStorage.removeItem('address-list')
     localStorage.removeItem('Shipping-method')
     localStorage.removeItem('total-prices')
     localStorage.removeItem('discount')

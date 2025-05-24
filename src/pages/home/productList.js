@@ -19,7 +19,7 @@ const updateCardProducts = (product) => {
       <img 
       alt="a random image by picsum.photos" 
       src="${item.imageURL}"
-      class="loading w-full rounded-[24px] object-fill mb-[12px]"
+      class="loading w-full rounded-[24px] object-fill mb-[12px] aspect-square"
       onerror="this.onerror=null;this.src='https://placeholder.pics/svg/300/EAEAEA-E8E8E8/000000-FFFFFF/image%20not%20found';"
       />
       <h2 class="text-[18px] font-[600] mb-[8px] line-clamp-1">${item.name}</h2>

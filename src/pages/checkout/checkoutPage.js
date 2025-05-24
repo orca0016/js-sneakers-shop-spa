@@ -21,7 +21,7 @@ const goToPayment = () => {
   const goToPaymentBtn = document.getElementById("go-to-payment");
   if (
     localStorage.getItem("Shipping-method") &&
-    localStorage.getItem("address-Shipping")
+    localStorage.getItem("address-list")
   ) {
     goToPaymentBtn.removeAttribute("disabled");
   } else {
@@ -43,9 +43,11 @@ const renderTotalPrice = () => {
   newTotalPrice("totalPrices", tempPrice);
 };
 const shippingCost = () => {
-  const exactShipping = JSON.parse(localStorage.getItem("Shipping-method")) || [
-    { price: "-", selected: true },
-  ];
+  const exactShipping = JSON.parse(localStorage.getItem("Shipping-method")) || 
+    { price: "-", selected: true }
+  ;
+  console.log(exactShipping);
+  
   const price = exactShipping.price;
   const shippingConstDiv = document.getElementById("shipping-const");
   shippingConstDiv.innerText = `${price !== "-" ? "$" : ""}${price}`;
