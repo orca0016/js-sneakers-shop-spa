@@ -2,7 +2,8 @@ import { mapIcon, nextArrowIcon, penIcon, truckIcon } from "../../utils/icons";
 
 export const renderCurrentAddress = () => {
   const currentCard = document.getElementById("current-card-address");
-  const addresses = JSON.parse(localStorage.getItem("address-Shipping")) || [
+  const addresses = JSON.parse(localStorage.getItem("address-list")) || [
+
     {
       id: 1,
       title: "Select a address",
