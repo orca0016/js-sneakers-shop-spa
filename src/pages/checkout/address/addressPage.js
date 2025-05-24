@@ -12,6 +12,7 @@ export const addressCardRendering = () => {
   const dataAddress = getPrevAddress();
   document.getElementById("container-card-address").innerHTML = "";
   dataAddress.forEach((item, index) => {
+
     const htmlElement = `
         <div class='px-6 '>
               <div id='select-address' class='rounded-3xl shadow-xl p-6 grid grid-cols-6 items-center gap-4 my-6 bg-white' >
@@ -24,6 +25,7 @@ export const addressCardRendering = () => {
                       } <span class='px-2  items-center rounded-lg bg-[#EAEAEA] text-xs text-[#3A3C40] ${
       index === 0 ? "flex" : "hidden"
     }'>default</span></h1>
+
                       <p id='description-address' class='text-gray-500 font-light text-[16px] line-clamp-1'>
                             ${item.description}
                         </p>
@@ -32,6 +34,7 @@ export const addressCardRendering = () => {
                       <button class='change-address cursor-pointer' data-id='${
                         item.id
                       }'>${selectIcon(item.selected)}</button>
+
                   </div>
               </div>
           </div>  
@@ -51,12 +54,14 @@ export const addressCardRendering = () => {
 const clickableCardAddress = () => {
   let dataAddress = getPrevAddress();
 
+
   const changeAddressBtns = document.getElementsByClassName("change-address");
 
   for (let button of changeAddressBtns) {
     button.addEventListener("click", () => {
       const idBtn = button.getAttribute("data-id");
       const indexData = dataAddress.findIndex((item) => item.id === idBtn);
+
       dataAddress = dataAddress.map((item) => {
         if (item.selected) {
           return {
@@ -69,12 +74,12 @@ const clickableCardAddress = () => {
       });
       dataAddress[indexData].selected = true;
       localStorage.setItem("address-list", JSON.stringify(dataAddress));
+
       addressCardRendering();
     });
   }
 };
 export const addressPage = () => {
-  // const dataAddress = getPrevAddress();
 
   const htmlElement = `
       <div class='w-full bg-white '>
@@ -108,8 +113,6 @@ export const addressPage = () => {
         </div>
         <!--this is end  modal section-->
 
-
-
          <div class='rounded-t-3xl bg-white   border-[#EFEFEF] border-t p-6 mt-20'>
             <button id='apply-btn-address' class='flex items-center justify-center gap-4 py-5 rounded-full bg-black text-white w-full'>
                 Apply
@@ -124,4 +127,5 @@ export const addressPage = () => {
     router.navigate("/checkout");
   });
   createNewAddress();
+
 };

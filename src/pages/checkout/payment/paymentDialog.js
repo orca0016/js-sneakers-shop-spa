@@ -6,6 +6,7 @@ const addEventForModalButtons = ()=>{
   confirmBtn.addEventListener('click' , ()=>{
     localStorage.removeItem('card-shop')
     localStorage.removeItem('address-list')
+
     localStorage.removeItem('Shipping-method')
     localStorage.removeItem('total-prices')
     localStorage.removeItem('discount')
