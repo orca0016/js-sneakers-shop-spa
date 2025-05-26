@@ -33,11 +33,11 @@ export const card = (item, isDialogOpen) => {
                     <div class='flex items-center gap-3 bg-gray-200  px-3 py-1 rounded-full text-base'>
                       <button data-id="${
                         item.id
-                      }" class='minus-products' >-</button>
+                      }" class='minus-products ${isDialogOpen?'hidden':''}' >-</button>
                       <span >${item.productQuantity}</span>
                       <button  data-id="${
                         item.id
-                      }" class='plus-products'>+</button>
+                      }" class='plus-products ${isDialogOpen?'hidden':''}'>+</button>
                     </div>
                   </div>
                 </div>

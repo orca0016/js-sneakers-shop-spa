@@ -18,15 +18,15 @@ export const footer = () => {
             ${bagIcon()}
             <p class='text-[10px] font-[600] text-[#152536]'>Cart</p>
         </a>
-        <a href='/' data-navigo class='flex items-center flex-col gap-1'>
+        <a href='/orders' data-navigo class='flex items-center flex-col gap-1'>
             ${cardShopIcon()}
             <p class='text-[10px] font-[600] text-[#152536]'>Orders</p>
         </a>
-        <a href='/' data-navigo class='flex items-center flex-col gap-1'>
+        <a href='/wallet' data-navigo class='flex items-center flex-col gap-1'>
             ${walletIcon()}
             <p class='text-[10px] font-[600] text-[#152536]'>Wallet</p>
         </a>
-        <a href='/' data-navigo class='flex items-center flex-col gap-1'>
+        <a href='/profile' data-navigo class='flex items-center flex-col gap-1'>
             ${personIcon()}
             <p class='text-[10px] font-[600] text-[#152536]'>Profile</p>
         </a>

@@ -77,7 +77,7 @@ export const paymentPage = () => {
                 <h1 class='text-2xl font-[700] mb-3'>Order Successful !</h1>
                 <p class='text-gray-500 mb-3'>You have  successfully made order</p>
                 <button class='w-full bg-black rounded-full text-white my-2 py-4' id='back-to-home-modal-payment'>Back to the Home page</button>
-                <button class='w-full bg-[#E7E7E7] rounded-full text-gray-500 my-2 py-4' id='view-receipt-btn'>View E-Receipt</button>
+                <button class='w-full bg-[#E7E7E7] rounded-full text-gray-500 my-2 py-4' id='view-receipt-btn'>View Orders</button>
               </div>
           </div>
           `;

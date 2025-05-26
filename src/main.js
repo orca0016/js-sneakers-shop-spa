@@ -6,15 +6,17 @@ import { addressPage } from "./pages/checkout/address/addressPage";
 import { checkoutPage } from "./pages/checkout/checkoutPage";
 import { paymentPage } from "./pages/checkout/payment/paymentPage";
 import { shippingPage } from "./pages/checkout/shipping/shippinPage";
+import { favoritePage } from "./pages/favorites/favorite-page";
 import { homePage } from "./pages/home/home-page";
 import { loginPage } from "./pages/login/login-page";
+import { notFoundPage } from "./pages/notFound/notFoundPage";
 import { onboarding } from "./pages/onboarding";
+import { orderPage } from "./pages/orders/orderPage";
 import { searchPage } from "./pages/search/search";
 import { renderProduct } from "./pages/showProduct/showProduct";
+import { signupPage } from "./pages/signup/signup-page";
 import "./style.css";
 import { showToast } from "./utils/toasts/toast";
-import { signupPage } from "./pages/signup/signup-page";
-import { favoritePage } from "./pages/favorites/favorite-page";
 
 export const router = new Navigo("/");
 // guard
@@ -28,6 +30,7 @@ if (!localStorage.getItem("show-onboard")) {
 if (!localStorage.getItem("show-onboard")) {
   router.navigate("welcome");
 }
+
 router
   .on("/", () => {
     homePage();
@@ -64,5 +67,11 @@ router
   })
   .on("/favorites", () => {
     favoritePage();
+  })
+  .on("/orders", () => {
+    orderPage();
+  })
+  .notFound(() => {
+    notFoundPage();
   });
 router.resolve();

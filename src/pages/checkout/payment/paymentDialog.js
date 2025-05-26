@@ -1,20 +1,19 @@
 import gsap from "gsap/all";
 import { router } from "../../../main";
 import { showToast } from "../../../utils/toasts/toast";
+import { createOrdersData } from "../../../utils/createOrdersData";
 const addEventForModalButtons = ()=>{
   const confirmBtn = document.getElementById('back-to-home-modal-payment')
   confirmBtn.addEventListener('click' , ()=>{
-    localStorage.removeItem('card-shop')
-    // localStorage.removeItem('address-list')
-    localStorage.removeItem('Shipping-method')
-    localStorage.removeItem('total-prices')
-    localStorage.removeItem('discount')
+    createOrdersData()
     document.getElementById('body').style.overflow='auto'
     router.navigate('/')
   })
   const viewReceiptBtn = document.getElementById('view-receipt-btn')
   viewReceiptBtn.addEventListener('click' , ()=>{
-    showToast('This feature is under construction.' , 'warning')
+    createOrdersData()
+    document.getElementById('body').style.overflow='auto'
+    router.navigate('/orders')
   })
 }
 export const paymentDialog = () => {
