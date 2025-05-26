@@ -40,6 +40,7 @@ export const handleShowDiscounts = () => {
     </div>
     `;
   });
+  
   const allCloseBtn = document.getElementsByClassName("delete-discount-btn");
   for (const element of allCloseBtn) {
     element.addEventListener("click", () => {

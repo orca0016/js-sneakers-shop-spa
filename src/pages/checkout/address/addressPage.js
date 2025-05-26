@@ -102,7 +102,7 @@ export const addressPage = () => {
         <div id='wrapper-dialog-add-new-address' class='fixed top-0 left-0 w-full h-screen bg-slate-900/60  hidden justify-center items-center '>
           <div id='box-dialog-add-new-address' class='max-w-[430px] py-10 px-6 rounded-3xl  bg-white '>
             <h1 class='font-semibold text-2xl pb-4 border-b border-gray-300'>Enter A New Address:</h1>
-            <form class='w-full flex flex-col gap-6 mt-4 items-center' id='form-dialog-add-new-address'>
+            <form autoComplete='off' class='w-full flex flex-col gap-6 mt-4 items-center' id='form-dialog-add-new-address'>
                 <input type="text" name="titleAddress" placeholder='title of new address' class='outline-none border border-gray-200 bg-[#FAFAFA] shadow-2xl rounded-lg py-3 px-2 w-full'>
                 <textarea maxRows="10" cols="" placeholder='enter your full address ' name='descriptionAddress' class='max-h-[200px] min-h-[100px] outline-none border border-gray-200 bg-[#FAFAFA] shadow-2xl rounded-lg py-5 px-3 w-full'></textarea> 
                 <button id='add-new-address' class='flex items-center justify-center gap-4 py-3 rounded-full bg-black text-white w-full'>

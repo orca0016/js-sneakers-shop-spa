@@ -1,7 +1,7 @@
 import gsap from "gsap/all";
 import { showToast } from "../../utils/toasts/toast";
 import { closeAnimationDialog } from "./animationsDialogCard";
-import { renderCard } from "./cardsPage";
+import { goToPayment, renderCard } from "./cardsPage";
 import { card } from "./singleCardProduct";
 
 const removeHandlingDialog = (product) => {
@@ -39,6 +39,7 @@ const removeHandlingDialog = (product) => {
     localStorage.setItem("card-shop", JSON.stringify(cardData));
     renderCard();
     closeAnimationDialog(dialogWrapper);
+    goToPayment()
   });
   dialogContent.addEventListener("click", (e) => {
     e.stopPropagation();

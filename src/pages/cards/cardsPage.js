@@ -1,3 +1,4 @@
+import { router } from "../../main";
 import { logoIcon, nextIcon, searchIcon } from "../../utils/icons";
 import { footer } from "../home/footer";
 import {
@@ -7,16 +8,23 @@ import {
   totalPrice,
 } from "./oparationsCard";
 import { card } from "./singleCardProduct";
-
+const getDataCards = () => {
+  const data = JSON.parse(localStorage.getItem("card-shop"));
+  if (data) {
+    return data;
+  } else {
+    return [];
+  }
+};
 export const renderCard = () => {
-  const cardData = JSON.parse(localStorage.getItem("card-shop")) || [];
+  const cardData = getDataCards();
   const cardsContainer = document.getElementById("cards-container");
 
   cardsContainer.innerHTML = "";
   cardData.forEach((element) => {
     cardsContainer.innerHTML += card(element);
   });
-  if (cardData.length===0) {
+  if (cardData.length === 0) {
     cardsContainer.innerHTML = `
     <div class='flex justify-center pt-10 col-span-2 text-center  flex-col items-center'>
         <img src='../../../public/images/not-found.png'/>
@@ -25,13 +33,25 @@ export const renderCard = () => {
        There are no products in your shopping cart. Please add a product to your cart.
         </p>
     </div>
-    `
+    `;
   }
   removeCard();
   increaseCardItem();
   decreaseCardItem();
 };
-
+export const goToPayment = () => {
+  const paymentBtn = document.getElementById("go-to-payment");
+  const handleNavigate = ()=>{
+    router.navigate('/checkout')
+  }
+  paymentBtn.removeEventListener('click' , handleNavigate)
+  paymentBtn.addEventListener('click' ,handleNavigate)
+  if (getDataCards().length === 0) {
+    paymentBtn.setAttribute("disabled", "true");
+  } else {
+    paymentBtn.removeAttribute("disabled");
+  }
+};
 export const cardPage = () => {
   const htmlElement = `
     <div class='bg-white min-h-[100vh] px-6 py-10'>
@@ -65,7 +85,7 @@ export const cardPage = () => {
               <p class='text-gray-text-search text-sm'> Total price</p>
               <h1 class='text-2xl font-bold' id='total-price-checkout-card'>1532</h1>
           </div>
-          <a href='/checkout' data-navigo class='col-span-3 text-2xl font-light bg-black shadow-xl px-10 py-4 rounded-full text-white flex items-center justify-center gap-4'>Checkout${nextIcon()}</a>
+          <button id='go-to-payment'  data-navigo class=' disabled:bg-gray-800 disabled:cursor-not-allowed col-span-3 text-2xl font-light bg-black shadow-xl px-10 py-4 rounded-full text-white flex items-center justify-center gap-4'>Checkout${nextIcon()}</button>
         </div>
       </div>
       ${footer()}
@@ -78,4 +98,5 @@ export const cardPage = () => {
   increaseCardItem();
   decreaseCardItem();
   totalPrice();
+  goToPayment()
 };
