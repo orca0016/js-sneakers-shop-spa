@@ -2,27 +2,30 @@ import { v4 as uuidv4 } from "uuid";
 import { router } from "../../main";
 import { closeIcon, optionIcon, searchIcon } from "../../utils/icons";
 
-let reSearch = JSON.parse(localStorage.getItem("history-search")) || [];
 export const handleLengthHistory = () => {
-  let list = JSON.parse(localStorage.getItem("history-search"));
+  let list = JSON.parse(localStorage.getItem("history-search")) || [];
   if (list.length > 10) {
-    list.shift();
+    list = list.slice(-10);
     localStorage.setItem("history-search", JSON.stringify(list));
   }
 };
+
 const handelLocalSearchHistory = (e) => {
+  const history = JSON.parse(localStorage.getItem("history-search")) || [];
+
   const newData = {
     id: uuidv4(),
     name: e.target.searchInput.value,
   };
-  localStorage.setItem(
-    "history-search",
-    JSON.stringify(reSearch ? [...reSearch, newData] : [newData])
-  );
+
+  const updatedHistory = [newData,...history];
+  localStorage.setItem("history-search", JSON.stringify(updatedHistory));
+
   handleLengthHistory();
 
   router.navigate("/search");
 };
+
 const createInputSearch = (divHistoryResults) => {
   //   input of search section
   const input = document.createElement("input");
@@ -85,10 +88,10 @@ export const searchSection = () => {
   form.appendChild(createSubmitSearch());
   form.appendChild(divHistoryResults);
   searchContainer.appendChild(form);
-  const option = document.createElement('div')
-  option.innerHTML=optionIcon()
-  option.className = 'absolute right-3 top-2'
-  form.appendChild(option)
+  const option = document.createElement("div");
+  option.innerHTML = optionIcon();
+  option.className = "absolute right-3 top-2";
+  form.appendChild(option);
   renderRowHistory();
 };
 export const renderRowHistory = () => {
@@ -112,10 +115,11 @@ export const renderRowHistory = () => {
           name: item.textContent,
           id: uuidv4(),
         };
-        const history = JSON.parse(localStorage.getItem("history-search"))||[];
+        const history =
+          JSON.parse(localStorage.getItem("history-search")) || [];
         localStorage.setItem(
           "history-search",
-          JSON.stringify([...history, newHistory])
+          JSON.stringify([newHistory,...history])
         );
         document.getElementById("body").style.overflow = "auto";
         handleLengthHistory();
@@ -125,15 +129,15 @@ export const renderRowHistory = () => {
   });
 
   const removeBtns = document.getElementsByClassName("remove-history-btns");
-for (let item of removeBtns) {
-  item.addEventListener("click", () => {
-    const currentHistory = JSON.parse(localStorage.getItem("history-search")) || [];
-    const updated = currentHistory.filter(
-      (element) => element.id !== item.getAttribute("listId")
-    );
-    localStorage.setItem("history-search", JSON.stringify(updated));
-    renderRowHistory();
-  });
-}
-
+  for (let item of removeBtns) {
+    item.addEventListener("click", () => {
+      const currentHistory =
+        JSON.parse(localStorage.getItem("history-search")) || [];
+      const updated = currentHistory.filter(
+        (element) => element.id !== item.getAttribute("listId")
+      );
+      localStorage.setItem("history-search", JSON.stringify(updated));
+      renderRowHistory();
+    });
+  }
 };

@@ -6,7 +6,6 @@ import { notFoundProduct } from "./notFoundSection";
 import { updateNumberResults } from "./search";
 import { searchAddFavorite } from "./searchAddFavorite";
 
-let isFetching = false;
 
 const updateCardProducts = (product) => {
   product.forEach((item) => {
@@ -24,7 +23,7 @@ const updateCardProducts = (product) => {
           <img 
           alt="a random image by picsum.photos" 
           src="${item.imageURL}"
-          class="loading w-full rounded-[24px] object-fill mb-[12px]"
+          class="loading w-full rounded-[24px] object-fill mb-[12px] aspect-square"
           onerror="this.onerror=null;this.src='https://placeholder.pics/svg/300/EAEAEA-E8E8E8/000000-FFFFFF/image%20not%20found';"
           />
           <h2 class="text-[18px] font-[600] mb-[8px] line-clamp-1">${item.name}</h2>
@@ -47,28 +46,34 @@ const updateCardProducts = (product) => {
   searchAddFavorite(product , 'search-btn-like')
 };
 
-
+let isFetching = false;
+let currentPage = 1;
+let hasMoreData = true;
 const fetchProducts = async (searchWord) => {
-  let currentPage = 1;
   const loader = document.getElementById("loader");
   try {
     loader.classList.add("show");
     isFetching = true;
 
-    const products = await getAllPRoducts(
-      `?page=${currentPage}&limit=10&search=${searchWord}`
-    );
+    const limit = 10;
+    const products = await getAllPRoducts(`?page=${currentPage}&limit=${limit}&search=${searchWord}`);
 
-    updateNumberResults(products.total);
-    if (products.total === 0) {
-      notFoundProduct();
+    if (currentPage === 1) updateNumberResults(products.total);
+
+    if (products.total === 0 || products.data.length === 0) {
+      if (currentPage === 1) notFoundProduct();
+      hasMoreData = false;
     } else {
       updateCardProducts(products.data);
-
       currentPage++;
-      isFetching = false;
-      loader.classList.remove("show");
+      if (products.data.length < limit) {
+        hasMoreData = false;
+      }
     }
+
+    isFetching = false;
+    loader.classList.remove("show");
+
   } catch (error) {
     console.log(error);
     checkExpireToken(error.response?.request?.status);
@@ -81,24 +86,22 @@ const fetchProducts = async (searchWord) => {
  * @param {string} searchWord -pas a word for search into the api .
 */
 export function infiniteResultSearch(isRerender, searchWord) {
-  if (isRerender) document.getElementById(`results-search`).innerHTML = "";
-  
+  if (isRerender) {
+    document.getElementById(`results-search`).innerHTML = "";
+    currentPage = 1;
+    hasMoreData = true;
+  }
+
   fetchProducts(searchWord);
+  window.scrollTo(0, 0);
 
-  window.addEventListener("scroll", async () => {
-    // Do not run if currently fetching
-    if (isFetching) return;
+  window.onscroll = async () => {
+    if (isFetching || !hasMoreData) return;
 
-    // Scrolled to bottom
-    if (
-      window.innerHeight + window.scrollY >=
-      document.body.offsetHeight - 10
-    ) {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
       if (location.pathname === "/search") {
         await fetchProducts(searchWord);
       }
     }
-  });
-  const el = document.getElementById("container-search-page");
-  window.scrollTo(0, el.offsetTop);
+  };
 }
